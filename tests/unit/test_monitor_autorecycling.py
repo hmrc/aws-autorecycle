@@ -1,24 +1,20 @@
 import unittest
-from unittest.mock import call
-
-from tests.test_data.monitor_autorecycle.describe_asg_lc import launch_configuration_asgs
-from tests.test_data.monitor_autorecycle.describe_asg_lt import launch_template_asgs
+from datetime import datetime, timedelta
+from unittest.mock import MagicMock, call, patch
 
 from src.monitor_autorecycle.main import (
-    config,
-    lambda_handler,
-    _describe_asg,
-    check,
-    check_instances,
     _compare_start_times,
+    _describe_asg,
     _describe_scaling_activities,
     _get_launching_activities,
-    _last_instance_activity_time
+    _last_instance_activity_time,
+    check,
+    check_instances,
+    config,
+    lambda_handler,
 )
-from unittest.mock import MagicMock, patch
-from datetime import datetime
-from datetime import timedelta
-
+from tests.test_data.monitor_autorecycle.describe_asg_lc import launch_configuration_asgs
+from tests.test_data.monitor_autorecycle.describe_asg_lt import launch_template_asgs
 
 CONTEXT = MagicMock(aws_request_id="test-request-id", function_name="test-function")
 
@@ -79,9 +75,7 @@ class TestMain(unittest.TestCase):
                 log.output[2],
                 "INFO:monitor_autorecycle:We have found 2 instances in the ASG",
             )
-            self.assertEqual(
-                log.output[3], "INFO:monitor_autorecycle:Found an instance: i-1"
-            )
+            self.assertEqual(log.output[3], "INFO:monitor_autorecycle:Found an instance: i-1")
             self.assertEqual(
                 log.output[4],
                 "INFO:monitor_autorecycle:i-1 has a HealthStatus of Healthy",
@@ -90,9 +84,7 @@ class TestMain(unittest.TestCase):
                 log.output[5],
                 "INFO:monitor_autorecycle:i-1 has a LifecycleState of InService",
             )
-            self.assertEqual(
-                log.output[6], "INFO:monitor_autorecycle:Found an instance: i-2"
-            )
+            self.assertEqual(log.output[6], "INFO:monitor_autorecycle:Found an instance: i-2")
             self.assertEqual(
                 log.output[7],
                 "INFO:monitor_autorecycle:i-2 has a HealthStatus of Healthy",
@@ -148,9 +140,7 @@ class TestMain(unittest.TestCase):
                 log.output[2],
                 "INFO:monitor_autorecycle:We have found 2 instances in the ASG",
             )
-            self.assertEqual(
-                log.output[3], "INFO:monitor_autorecycle:Found an instance: i-3"
-            )
+            self.assertEqual(log.output[3], "INFO:monitor_autorecycle:Found an instance: i-3")
             self.assertEqual(
                 log.output[4],
                 "INFO:monitor_autorecycle:i-3 has a HealthStatus of NotHealthy",
@@ -211,9 +201,7 @@ class TestMain(unittest.TestCase):
                 log.output[2],
                 "INFO:monitor_autorecycle:We have found 2 instances in the ASG",
             )
-            self.assertEqual(
-                log.output[3], "INFO:monitor_autorecycle:Found an instance: i-5"
-            )
+            self.assertEqual(log.output[3], "INFO:monitor_autorecycle:Found an instance: i-5")
             self.assertEqual(
                 log.output[4],
                 "INFO:monitor_autorecycle:i-5 has a HealthStatus of NotHealthy",
@@ -273,9 +261,7 @@ class TestMain(unittest.TestCase):
                 log.output[2],
                 "INFO:monitor_autorecycle:We have found 2 instances in the ASG",
             )
-            self.assertEqual(
-                log.output[3], "INFO:monitor_autorecycle:Found an instance: i-7"
-            )
+            self.assertEqual(log.output[3], "INFO:monitor_autorecycle:Found an instance: i-7")
             self.assertEqual(
                 log.output[4],
                 "INFO:monitor_autorecycle:i-7 has a HealthStatus of Healthy",
@@ -284,9 +270,7 @@ class TestMain(unittest.TestCase):
                 log.output[5],
                 "INFO:monitor_autorecycle:i-7 has a LifecycleState of InService",
             )
-            self.assertEqual(
-                log.output[6], "INFO:monitor_autorecycle:Found an instance: i-8"
-            )
+            self.assertEqual(log.output[6], "INFO:monitor_autorecycle:Found an instance: i-8")
             self.assertEqual(
                 log.output[7],
                 "INFO:monitor_autorecycle:i-8 has a HealthStatus of Healthy",
@@ -342,9 +326,7 @@ class TestMain(unittest.TestCase):
                 log.output[2],
                 "INFO:monitor_autorecycle:We have found 2 instances in the ASG",
             )
-            self.assertEqual(
-                log.output[3], "INFO:monitor_autorecycle:Found an instance: i-9"
-            )
+            self.assertEqual(log.output[3], "INFO:monitor_autorecycle:Found an instance: i-9")
             self.assertEqual(
                 log.output[4],
                 "INFO:monitor_autorecycle:i-9 has a HealthStatus of Healthy",
@@ -353,9 +335,7 @@ class TestMain(unittest.TestCase):
                 log.output[5],
                 "INFO:monitor_autorecycle:i-9 has a LifecycleState of InService",
             )
-            self.assertEqual(
-                log.output[6], "INFO:monitor_autorecycle:Found an instance: i-10"
-            )
+            self.assertEqual(log.output[6], "INFO:monitor_autorecycle:Found an instance: i-10")
             self.assertEqual(
                 log.output[7],
                 "INFO:monitor_autorecycle:i-10 has a HealthStatus of Healthy",
@@ -457,9 +437,7 @@ class TestMain(unittest.TestCase):
                 log.output[2],
                 "INFO:monitor_autorecycle:We have found 2 instances in the ASG",
             )
-            self.assertEqual(
-                log.output[3], "INFO:monitor_autorecycle:Found an instance: i-13"
-            )
+            self.assertEqual(log.output[3], "INFO:monitor_autorecycle:Found an instance: i-13")
             self.assertEqual(
                 log.output[4],
                 "INFO:monitor_autorecycle:i-13 has a HealthStatus of Healthy",
@@ -468,9 +446,7 @@ class TestMain(unittest.TestCase):
                 log.output[5],
                 "INFO:monitor_autorecycle:i-13 has a LifecycleState of InService",
             )
-            self.assertEqual(
-                log.output[6], "INFO:monitor_autorecycle:Found an instance: i-14"
-            )
+            self.assertEqual(log.output[6], "INFO:monitor_autorecycle:Found an instance: i-14")
             self.assertEqual(
                 log.output[7],
                 "INFO:monitor_autorecycle:i-14 has a HealthStatus of NotHealthy",
@@ -489,9 +465,7 @@ class TestMain(unittest.TestCase):
             result = lambda_handler(test_event, CONTEXT)
             self.assertFalse(result["recycle_success"])
 
-    def test_lambda_handler_raises_exception_with_unknown_component(
-        self, mock_boto_client
-    ):
+    def test_lambda_handler_raises_exception_with_unknown_component(self, mock_boto_client):
         mock_boto_client().get_paginator.return_value.paginate.return_value = [
             launch_configuration_asgs(),
             launch_template_asgs(),
@@ -516,16 +490,12 @@ class Check(unittest.TestCase):
         mock_launching_activities,
         mock_check_instances,
     ):
-        mock_describe_asg.return_value = launch_configuration_asgs()[
-            "AutoScalingGroups"
-        ][0]
+        mock_describe_asg.return_value = launch_configuration_asgs()["AutoScalingGroups"][0]
         mock_launching_activities.return_value = []
         component = "doesnt_matter"
         check(component)
         mock_describe_asg.assert_called_with(component)
-        mock_scaling_activities.assert_called_with(
-            "public_routing_proxy_healthy-asg-123"
-        )
+        mock_scaling_activities.assert_called_with("public_routing_proxy_healthy-asg-123")
         mock_check_instances.assert_not_called()
 
     def test_check_returns_check_instances_when_scaling_activities(
@@ -545,17 +515,13 @@ class Check(unittest.TestCase):
         self.assertEqual(check(component), mock_check_instances.return_value)
         mock_describe_asg.assert_called_with(component)
         mock_scaling_activities.assert_called_with("test_asg_name")
-        mock_launching_activities.assert_called_with(
-            mock_scaling_activities.return_value
-        )
+        mock_launching_activities.assert_called_with(mock_scaling_activities.return_value)
 
 
 class CheckInstances(unittest.TestCase):
     @patch("src.monitor_autorecycle.main._compare_start_times")
     @patch("src.monitor_autorecycle.main._last_instance_activity_time")
-    def test_check_instances_with_healthy_instances(
-        self, mock_last_instance_activity_time, mock_compare_start_times
-    ):
+    def test_check_instances_with_healthy_instances(self, mock_last_instance_activity_time, mock_compare_start_times):
         asg = launch_configuration_asgs()["AutoScalingGroups"][0]
         launching_activities = "doesnt_matter"
         mock_last_instance_activity_time.side_effect = [1, 2]
@@ -580,9 +546,7 @@ class CheckInstances(unittest.TestCase):
         launching_activities = "doesnt_matter"
         self.assertFalse(check_instances(asg, launching_activities))
 
-    def test_check_instances_with_no_activities(
-        self
-    ):
+    def test_check_instances_with_no_activities(self):
         asg = launch_configuration_asgs()["AutoScalingGroups"][0]
         launching_activities = []
 
@@ -590,6 +554,7 @@ class CheckInstances(unittest.TestCase):
             check_instances(asg, launching_activities),
             False,
         )
+
 
 class CompareStartTimes(unittest.TestCase):
     def test_compare_start_times_within_delta(self):
@@ -632,15 +597,12 @@ class DescribeAsg(unittest.TestCase):
             response,
         ]
         test_response = _describe_asg(component)
-        self.assertEqual(
-            test_response["Instances"][0]["LaunchTemplate"]["Version"], "10"
-        )
+        self.assertEqual(test_response["Instances"][0]["LaunchTemplate"]["Version"], "10")
 
 
 @patch("boto3.client")
 class DescribeScalingActivities(unittest.TestCase):
     def test_describe_scaling_activities_returns_activities(self, mock_boto_client):
-
         response = {
             "Activities": [
                 {
@@ -652,9 +614,7 @@ class DescribeScalingActivities(unittest.TestCase):
         }
 
         mock_boto_client().describe_scaling_activities.return_value = response
-        self.assertEqual(
-            _describe_scaling_activities("test_asg"), response["Activities"]
-        )
+        self.assertEqual(_describe_scaling_activities("test_asg"), response["Activities"])
         mock_boto_client.assert_called_with("autoscaling", "eu-west-2", config=config)
         mock_boto_client().describe_scaling_activities.assert_called_with(
             AutoScalingGroupName="test_asg",
@@ -741,10 +701,7 @@ class LastScalingActivityTime(unittest.TestCase):
     ):
         scaling_activities = []
 
-        self.assertEqual(
-            _last_instance_activity_time(scaling_activities, "test_id"),
-            None
-        )
+        self.assertEqual(_last_instance_activity_time(scaling_activities, "test_id"), None)
 
 
 @patch("src.monitor_autorecycle.main._monitor_autorecycle")
