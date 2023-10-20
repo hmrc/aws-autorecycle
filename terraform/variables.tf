@@ -2,11 +2,6 @@ variable "account_engineering_boundary" {
   type = string
 }
 
-variable "component" {
-  description = "The name of the component"
-  type        = string
-}
-
 variable "environment" {
   description = "Name of the environment the lambda function is deployed to"
   type        = string
