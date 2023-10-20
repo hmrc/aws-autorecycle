@@ -39,6 +39,6 @@ data "aws_iam_policy_document" "monitor_autorecycle_lambda_policy" {
 }
 
 resource "aws_iam_role_policy" "aws_autorecycle_invoke_stepfunctions_lambda" {
-  role   = monitor_autorecycle_lambda.iam_role_id
+  role   = module.monitor_autorecycle_lambda.iam_role_id
   policy = data.aws_iam_policy_document.monitor_autorecycle_lambda_policy.json
 }
