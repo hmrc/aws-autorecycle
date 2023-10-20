@@ -8,7 +8,7 @@ module "monitor_autorecycle_lambda" {
   environment_variables = {
   }
   function_name                           = "monitor-autorecycle"
-  image_command                           = "monitor_autorecycle.main.lambda_handler"
+  image_command                           = ["monitor_autorecycle.main.lambda_handler"]
   image_uri                               = "419929493928.dkr.ecr.eu-west-2.amazonaws.com/aws-autorecycle:${var.image_tag}"
   lambda_git_repo                         = "https://github.com/hmrc/aws-autorecycle"
   log_subscription_filter_destination_arn = var.log_subscription_filter_destination_arn
