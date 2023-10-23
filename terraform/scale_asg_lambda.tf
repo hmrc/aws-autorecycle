@@ -16,7 +16,7 @@ module "autorecycle_scale_asg_lambda" {
 
 data "aws_iam_policy_document" "autorecycle_scale_asg" {
   statement {
-    effect    = "Allow"
+    effect = "Allow"
 
     actions = [
       "autoscaling:DescribeAutoScalingGroups",
@@ -24,11 +24,11 @@ data "aws_iam_policy_document" "autorecycle_scale_asg" {
       "autoscaling:ExecutePolicy",
     ]
 
-    resources = ["*"]  #tfsec:ignore:aws-iam-no-policy-wildcards
+    resources = ["*"] #tfsec:ignore:aws-iam-no-policy-wildcards
   }
 
   statement {
-    effect    = "Allow"
+    effect = "Allow"
 
     actions = [
       "ec2:DescribeInstanceStatus",
