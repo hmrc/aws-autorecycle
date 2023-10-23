@@ -1,5 +1,3 @@
-data "aws_caller_identity" "current" {}
-
 module "monitor_autorecycle_lambda" {
   source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
 
@@ -16,7 +14,7 @@ module "monitor_autorecycle_lambda" {
   timeout                                 = 300
 }
 
-resource "aws_lambda_function_event_invoke_config" "lambda_event_invoke_config" {
+resource "aws_lambda_function_event_invoke_config" "monitor_autorecycle_lambda" {
   function_name                = module.monitor_autorecycle_lambda.lambda_name
   maximum_event_age_in_seconds = 300
   maximum_retry_attempts       = 0
@@ -35,7 +33,7 @@ data "aws_iam_policy_document" "monitor_autorecycle_lambda_policy" {
   }
 }
 
-resource "aws_iam_role_policy" "aws_autorecycle_invoke_stepfunctions_lambda" {
+resource "aws_iam_role_policy" "monitor_autorecycle_lambda" {
   role   = module.monitor_autorecycle_lambda.iam_role_id
   policy = data.aws_iam_policy_document.monitor_autorecycle_lambda_policy.json
 }

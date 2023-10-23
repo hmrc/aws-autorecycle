@@ -16,3 +16,13 @@ variable "log_subscription_filter_destination_arn" {
   description = "The Kibana log subscription destination ARN"
   type        = string
 }
+
+variable "state_machine_id" {
+  description = "ID of the state machine the lambda will start"
+  type        = string
+}
+
+variable "slack_channel" {
+  description = "Slack channel to post to"
+  type        = string
+}
