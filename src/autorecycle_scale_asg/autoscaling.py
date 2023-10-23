@@ -18,7 +18,7 @@ def describe_asg(component_name_maybe_with_az_suffix: str) -> List[AutoScalingGr
 
     auto_scaling_groups: List[AutoScalingGroupTypeDef] = []
     for page in asg_client.get_paginator("describe_auto_scaling_groups").paginate(PaginationConfig={"PageSize": 100}):
-        auto_scaling_groups += page["AutoScalingGroups"]  # type: ignore
+        auto_scaling_groups += page["AutoScalingGroups"]
 
     (component_name, number_of_subs_made) = re.subn("_[abc]$", "", component_name_maybe_with_az_suffix)
     extension_re = ""

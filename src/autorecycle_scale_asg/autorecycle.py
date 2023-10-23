@@ -38,7 +38,7 @@ def recently_scaled(activity: ActivityTypeDef, min_age: int = 10) -> bool:
     lc_age = utc.localize(datetime.now() - timedelta(minutes=min_age))
     if "EndTime" not in activity:
         return False
-    return activity["EndTime"] > lc_age
+    return bool(activity["EndTime"] > lc_age)
 
 
 def get_launch_template_version(asg_or_instance: Union[AutoScalingGroupTypeDef, InstanceTypeDef]) -> Optional[str]:
@@ -46,7 +46,7 @@ def get_launch_template_version(asg_or_instance: Union[AutoScalingGroupTypeDef, 
     if "LaunchTemplate" not in asg_or_instance:
         return None
 
-    return asg_or_instance["LaunchTemplate"]["Version"]
+    return str(asg_or_instance["LaunchTemplate"]["Version"])
 
 
 def get_next_asg_action(
