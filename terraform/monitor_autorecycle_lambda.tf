@@ -27,9 +27,6 @@ data "aws_iam_policy_document" "monitor_autorecycle_lambda_policy" {
     effect = "Allow"
 
     actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
       "autoscaling:DescribeAutoScalingGroups",
       "autoscaling:DescribeScalingActivities",
     ]
