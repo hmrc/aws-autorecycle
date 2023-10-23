@@ -13,7 +13,7 @@ class GetComponentDetails(unittest.TestCase):
         """
         With valid event json
         """
-        with open("tests/test_data/test-event.json", "rb") as f:
+        with open("tests/test_data/autorecycle_invoke_stepfunctions/test-event.json", "rb") as f:
             test_event = json.load(f)
         self.result = get_component_name(test_event)
         assert self.result == "test-protected-mdtp"
@@ -22,7 +22,7 @@ class GetComponentDetails(unittest.TestCase):
         """
         With a component which is recyclable and using a launch template
         """
-        with open("tests/test_data/test-event-launch-template.json", "rb") as f:
+        with open("tests/test_data/autorecycle_invoke_stepfunctions/test-event-launch-template.json", "rb") as f:
             test_event_lt = json.load(f)
 
         self.assertEqual("test-protected-mdtp", get_component_name(test_event_lt))
@@ -31,7 +31,7 @@ class GetComponentDetails(unittest.TestCase):
         """
         When there is no event detail we should raise an exception
         """
-        with open("tests/test_data/test-event-launch-template.json", "rb") as f:
+        with open("tests/test_data/autorecycle_invoke_stepfunctions/test-event-launch-template.json", "rb") as f:
             test_event_lt = json.load(f)
 
         test_event_lt.pop("detail", None)
@@ -43,7 +43,7 @@ class GetComponentDetails(unittest.TestCase):
         """
         When launchConfiguration or launchTemplate update not present UpdateAutoScalingGroup event
         """
-        with open("tests/test_data/test-event-no-update-present.json", "rb") as f:
+        with open("tests/test_data/autorecycle_invoke_stepfunctions/test-event-no-update-present.json", "rb") as f:
             test_event_lt = json.load(f)
 
         with self.assertRaises(SystemExit):
