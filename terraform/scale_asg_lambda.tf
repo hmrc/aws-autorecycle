@@ -21,14 +21,14 @@ data "aws_iam_policy_document" "autorecycle_scale_asg" {
       "autoscaling:DescribeScalingActivities",
       "autoscaling:ExecutePolicy",
     ]
-    effect = "Allow"
+    effect    = "Allow"
     resources = ["*"]
   }
   statement {
     actions = [
       "ec2:DescribeInstanceStatus",
     ]
-    effect = "Allow"
+    effect    = "Allow"
     resources = ["*"]
   }
 }
