@@ -1,0 +1,11 @@
+{
+    "Description": "Terminating EC2 instance: i-0123456789",
+    "StatusCode": "Successful",
+    "Cause": "At 2018-05-09T10:58:47Z a user request executed policy recycle-scale-in-test_component_a changing the desired capacity from 1 to 0.  At 2018-05-09T10:59:04Z an instance was taken out of service in response to a difference between desired and actual capacity, shrinking the capacity from 1 to 0.  At 2018-05-09T10:59:04Z instance i-0123456789 was selected for termination.",
+    "StartTime": "2018-05-09T10:59:04.663Z",
+    "EndTime": "2018-05-09T11:01:27Z",
+    "ActivityId": "00000-00000-0000-0000",
+    "Progress": 100,
+    "Details": "{\"Subnet ID\":\"subnet-12345\",\"Availability Zone\":\"eu-west-2a\"}",
+    "AutoScalingGroupName": "test_component_a-asg-0123456789"
+}

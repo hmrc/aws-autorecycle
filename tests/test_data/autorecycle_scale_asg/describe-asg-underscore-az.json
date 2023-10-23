@@ -1,0 +1,174 @@
+{
+   "AutoScalingGroups": [
+       {
+           "AutoScalingGroupName": "sensu_proxy-asg-20180820080824175500000005",
+           "LaunchTemplate": {
+               "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+               "LaunchTemplateName": "sensu-proxy-lt",
+               "Version": "9"
+           },
+           "Instances": [
+               {
+                   "InstanceId": "i-0123456789",
+                   "AvailabilityZone": "eu-west-2a",
+                   "LifecycleState": "InService",
+                   "HealthStatus": "Healthy",
+                   "LaunchTemplate": {
+                       "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                       "LaunchTemplateName": "sensu-proxy-lt",
+                       "Version": "9"
+                   }
+               }
+           ]
+       },
+       {
+           "AutoScalingGroupName": "tel-sensu-proxy-asg-20181015101138889300000005",
+           "LaunchTemplate": {
+               "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+               "LaunchTemplateName": "tel-sensu-proxy-lt",
+               "Version": "9"
+           },
+           "Instances": [
+               {
+                   "InstanceId": "i-0123456789",
+                   "AvailabilityZone": "eu-west-2a",
+                   "LifecycleState": "InService",
+                   "HealthStatus": "Healthy",
+                   "LaunchTemplate": {
+                       "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                       "LaunchTemplateName": "tel-sensu-proxy-lt",
+                       "Version": "9"
+                   }
+               }
+           ]
+       },
+       {
+           "AutoScalingGroupName": "sensu-asg-00340a9d51ccc10d09cc6a6197",
+           "LaunchTemplate": {
+               "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+               "LaunchTemplateName": "sensu-lt",
+               "Version": "9"
+           },
+           "Instances": [
+               {
+                   "InstanceId": "i-0123456789",
+                   "AvailabilityZone": "eu-west-2a",
+                   "LifecycleState": "InService",
+                   "HealthStatus": "Healthy",
+                   "LaunchTemplate": {
+                       "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                       "LaunchTemplateName": "sensu-lt",
+                       "Version": "9"
+                   }
+               }
+           ]
+       },
+       {
+           "AutoScalingGroupName": "protected_oracle_proxy_a-asg-2018121414012939380000000e",
+           "LaunchTemplate": {
+               "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+               "LaunchTemplateName": "protected-oracle-proxy-a-lt",
+               "Version": "9"
+           },
+           "Instances": [
+               {
+                   "InstanceId": "i-0123456789",
+                   "AvailabilityZone": "eu-west-2a",
+                   "LifecycleState": "InService",
+                   "HealthStatus": "Healthy",
+                   "LaunchTemplate": {
+                       "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                       "LaunchTemplateName": "protected-oracle-proxy-a-lt",
+                       "Version": "9"
+                   }
+               }
+           ]
+       },
+
+		{
+           "AutoScalingGroupName": "protected_oracle_proxy_b-asg-2018121414012930210000000d",
+            "LaunchTemplate": {
+                "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                "LaunchTemplateName": "protected-oracle-proxy-b-lt",
+                "Version": "9"
+            },
+           "Instances": [
+               {
+                   "InstanceId": "i-0123456789",
+                   "AvailabilityZone": "eu-west-2a",
+                   "LifecycleState": "InService",
+                   "HealthStatus": "Healthy",
+                   "LaunchTemplate": {
+                       "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                       "LaunchTemplateName": "protected-oracle-proxy-b-lt",
+                       "Version": "9"
+                   }
+               }
+           ]
+       },
+       {
+           "AutoScalingGroupName": "kubernetes-etcd_a-asg-2018121414012939380000000d",
+           "LaunchTemplate": {
+               "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+               "LaunchTemplateName": "kubernetes-lt",
+               "Version": "9"
+           },
+           "Instances": [
+               {
+                   "InstanceId": "i-0123456789",
+                   "AvailabilityZone": "eu-west-2a",
+                   "LifecycleState": "InService",
+                   "HealthStatus": "Healthy",
+                   "LaunchTemplate": {
+                       "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                       "LaunchTemplateName": "kubernetes-lt",
+                       "Version": "9"
+                   }
+               }
+           ]
+       },
+	   {
+          "AutoScalingGroupName": "kubernetes-etcd_b-asg-2018121414012930210000000d",
+           "LaunchTemplate": {
+               "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+               "LaunchTemplateName": "kubernetes-b-lt",
+               "Version": "9"
+           },
+          "Instances": [
+              {
+                  "InstanceId": "i-0123456789",
+                  "AvailabilityZone": "eu-west-2a",
+                  "LifecycleState": "InService",
+                  "HealthStatus": "Healthy",
+                  "LaunchTemplate": {
+                      "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                      "LaunchTemplateName": "kubernetes-b-lt",
+                      "Version": "9"
+                  }
+              }
+          ]
+       },
+	   {
+          "AutoScalingGroupName": "kubernetes-etcd_c-asg-2018121414012930210000000d",
+           "LaunchTemplate": {
+               "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+               "LaunchTemplateName": "kubernetes-c-lt",
+               "Version": "9"
+           },
+          "Instances": [
+              {
+                  "InstanceId": "i-0123456789",
+                  "AvailabilityZone": "eu-west-2a",
+                  "LifecycleState": "InService",
+                  "HealthStatus": "Healthy",
+                  "LaunchTemplate": {
+                      "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                      "LaunchTemplateName": "kubernetes-c-lt",
+                      "Version": "9"
+                  }
+              }
+          ]
+       }
+   ]
+
+}

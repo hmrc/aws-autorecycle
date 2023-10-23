@@ -1,0 +1,106 @@
+[
+    {
+        "AutoScalingGroupName": "admin_frontend_proxy-asg-00d8db81999d264f72da684c9b",
+        "AutoScalingGroupARN": "arn:aws:autoscaling:eu-west-2:150648916438:autoScalingGroup:d2ef85e6-0647-4b53-9397-8c498baae145:autoScalingGroupName/admin_frontend_proxy-asg-00d8db81999d264f72da684c9b",
+        "LaunchTemplate": {
+            "LaunchTemplateId": "lt-0f723c6288b217894",
+            "LaunchTemplateName": "admin_frontend_proxy-lt-20230213152654451300000001",
+            "Version": "9"
+        },
+        "MinSize": 2,
+        "MaxSize": 4,
+        "DesiredCapacity": 4,
+        "DefaultCooldown": 300,
+        "AvailabilityZones": [
+            "eu-west-2a",
+            "eu-west-2b"
+        ],
+        "LoadBalancerNames": [],
+        "TargetGroupARNs": [
+            "arn:aws:elasticloadbalancing:eu-west-2:150648916438:targetgroup/admin-frontend-proxy-https/5f0ae10837658e63"
+        ],
+        "HealthCheckType": "ELB",
+        "HealthCheckGracePeriod": 10,
+        "Instances": [
+            {
+                "InstanceId": "i-000daa9f029c38e2a",
+                "InstanceType": "t3.small",
+                "AvailabilityZone": "eu-west-2a",
+                "LifecycleState": "InService",
+                "HealthStatus": "Healthy",
+                "LaunchTemplate": {
+                    "LaunchTemplateId": "lt-0f723c6288b217894",
+                    "LaunchTemplateName": "admin_frontend_proxy-lt-20230213152654451300000001",
+                    "Version": "8"
+                },
+                "ProtectedFromScaleIn": false
+            },
+            {
+                "InstanceId": "i-0039ecf76786716a8",
+                "InstanceType": "t3.small",
+                "AvailabilityZone": "eu-west-2b",
+                "LifecycleState": "InService",
+                "HealthStatus": "Healthy",
+                "LaunchTemplate": {
+                    "LaunchTemplateId": "lt-0f723c6288b217894",
+                    "LaunchTemplateName": "admin_frontend_proxy-lt-20230213152654451300000001",
+                    "Version": "8"
+                },
+                "ProtectedFromScaleIn": false
+            },
+            {
+                "InstanceId": "i-025cd26b337ddd6c9",
+                "InstanceType": "t3.small",
+                "AvailabilityZone": "eu-west-2b",
+                "LifecycleState": "InService",
+                "HealthStatus": "Healthy",
+                "LaunchTemplate": {
+                    "LaunchTemplateId": "lt-0f723c6288b217894",
+                    "LaunchTemplateName": "admin_frontend_proxy-lt-20230213152654451300000001",
+                    "Version": "9"
+                },
+                "ProtectedFromScaleIn": false
+            },
+            {
+                "InstanceId": "i-05efd8d37fbdc995d",
+                "InstanceType": "t3.small",
+                "AvailabilityZone": "eu-west-2a",
+                "LifecycleState": "InService",
+                "HealthStatus": "Healthy",
+                "LaunchTemplate": {
+                    "LaunchTemplateId": "lt-0f723c6288b217894",
+                    "LaunchTemplateName": "admin_frontend_proxy-lt-20230213152654451300000001",
+                    "Version": "9"
+                },
+                "ProtectedFromScaleIn": false
+            }
+        ],
+        "CreatedTime": "2017-09-20T10:14:13.152000+00:00",
+        "SuspendedProcesses": [],
+        "VPCZoneIdentifier": "subnet-9c33fbd1,subnet-9719aaec",
+        "EnabledMetrics": [
+            {
+                "Metric": "GroupTotalInstances",
+                "Granularity": "1Minute"
+            },
+            {
+                "Metric": "GroupInServiceInstances",
+                "Granularity": "1Minute"
+            },
+            {
+                "Metric": "GroupDesiredCapacity",
+                "Granularity": "1Minute"
+            }
+        ],
+        "Tags": [
+        ],
+        "TerminationPolicies": [
+            "OldestLaunchTemplate",
+            "OldestLaunchConfiguration",
+            "OldestInstance"
+        ],
+        "NewInstancesProtectedFromScaleIn": false,
+        "ServiceLinkedRoleARN": "arn:aws:iam::150648916438:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+        "TrafficSources": []
+    }
+]
