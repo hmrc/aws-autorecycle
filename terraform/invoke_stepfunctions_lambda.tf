@@ -19,7 +19,7 @@ module "invoke_stepfunctions_lambda" {
   timeout                                 = 300
 }
 
-resource "aws_lambda_function_event_invoke_config" "lambda_event_invoke_config" {
+resource "aws_lambda_function_event_invoke_config" "invoke_stepfunctions_lambda" {
   function_name                = module.invoke_stepfunctions_lambda.lambda_name
   maximum_event_age_in_seconds = 300
   maximum_retry_attempts       = 0
