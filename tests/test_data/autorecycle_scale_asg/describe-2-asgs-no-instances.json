@@ -1,0 +1,10 @@
+[
+    {
+        "AutoScalingGroupName": "test_component_a",
+        "Instances": []
+    },
+    {
+        "AutoScalingGroupName": "test_component_b",
+        "Instances": []
+    }
+]

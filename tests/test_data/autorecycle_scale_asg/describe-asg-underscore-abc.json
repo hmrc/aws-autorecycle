@@ -1,0 +1,88 @@
+{
+    "AutoScalingGroups": [
+        {
+            "AutoScalingGroupName": "test_component-asg-20181112132421997300000010",
+            "LaunchTemplate": {
+                "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                "LaunchTemplateName": "test_component-lt",
+                "Version": "9"
+            },
+            "Instances": [
+                {
+                    "InstanceId": "i-0123456789",
+                    "AvailabilityZone": "eu-west-2a",
+                    "LifecycleState": "InService",
+                    "HealthStatus": "Healthy",
+                    "LaunchTemplate": {
+                        "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                        "LaunchTemplateName": "test_component-lt",
+                        "Version": "9"
+                    }
+                }
+            ]
+        },
+        {
+            "AutoScalingGroupName": "test_component_a-asg-20181112132421997300000010",
+            "LaunchTemplate": {
+                "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                "LaunchTemplateName": "test_component_a-lt",
+                "Version": "9"
+            },
+            "Instances": [
+                {
+                    "InstanceId": "i-0123456789",
+                    "AvailabilityZone": "eu-west-2a",
+                    "LifecycleState": "InService",
+                    "HealthStatus": "Healthy",
+                    "LaunchTemplate": {
+                        "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                        "LaunchTemplateName": "test_component_a-lt",
+                        "Version": "9"
+                    }
+                }
+            ]
+        },
+        {
+            "AutoScalingGroupName": "test_component_b-asg-20181112132421997300000010",
+            "LaunchTemplate": {
+                "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                "LaunchTemplateName": "test_component_b-lt",
+                "Version": "9"
+            },
+            "Instances": [
+                {
+                    "InstanceId": "i-0123456789",
+                    "AvailabilityZone": "eu-west-2a",
+                    "LifecycleState": "InService",
+                    "HealthStatus": "Healthy",
+                    "LaunchTemplate": {
+                        "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                        "LaunchTemplateName": "test_component_b-lt",
+                        "Version": "9"
+                    }
+                }
+            ]
+        },
+        {
+            "AutoScalingGroupName": "sensu-asg-00340a9d51ccc10d09cc6a6197",
+            "LaunchTemplate": {
+                "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                "LaunchTemplateName": "sensu-lt",
+                "Version": "9"
+            },
+            "Instances": [
+                {
+                    "InstanceId": "i-0123456789",
+                    "AvailabilityZone": "eu-west-2a",
+                    "LifecycleState": "InService",
+                    "HealthStatus": "Healthy",
+                    "LaunchTemplate": {
+                        "LaunchTemplateId": "lt-06d6ec44c5940bf2a",
+                        "LaunchTemplateName": "sensu-lt",
+                        "Version": "9"
+                    }
+                }
+            ]
+        }
+    ]
+}

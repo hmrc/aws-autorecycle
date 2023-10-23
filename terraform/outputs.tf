@@ -1,4 +1,4 @@
-# monitor_autorecycle
+# monitor_autorecycle_lambda
 output "monitor_autorecycle_lambda_alias_name" {
   value = module.monitor_autorecycle_lambda.lambda_alias_name
 }
@@ -38,4 +38,25 @@ output "invoke_stepfunctions_lambda_role_arn" {
 
 output "invoke_stepfunctions_lambda_role" {
   value = module.invoke_stepfunctions_lambda.iam_role_id
+}
+
+# autorecycle_scale_asg_lambda
+output "autorecycle_scale_asg_lambda_alias_name" {
+  value = module.autorecycle_scale_asg_lambda.lambda_alias_name
+}
+
+output "autorecycle_scale_asg_lambda_arn" {
+  value = module.autorecycle_scale_asg_lambda.lambda_alias_arn
+}
+
+output "autorecycle_scale_asg_lambda_name" {
+  value = module.autorecycle_scale_asg_lambda.lambda_name
+}
+
+output "autorecycle_scale_asg_lambda_role_arn" {
+  value = module.autorecycle_scale_asg_lambda.iam_role_arn
+}
+
+output "autorecycle_scale_asg_lambda_role" {
+  value = module.autorecycle_scale_asg_lambda.iam_role_id
 }

@@ -1,0 +1,14 @@
+{
+	"ResponseMetadata": {
+		"HTTPHeaders": {
+			"content-type": "text/xml",
+			"x-amzn-requestid": "086ec409-581e-11e8-b6ec-c9d66875dc91",
+			"date": "Tue, 15 May 2018 08:57:44 GMT",
+			"content-length": "213"
+		},
+		"RequestId": "086ec409-581e-11e8-b6ec-c9d66875dc91",
+		"HTTPStatusCode": 418,
+		"RetryAttempts": 0
+	}
+}
+

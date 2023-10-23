@@ -1,0 +1,67 @@
+{
+    "AutoScalingGroups": [
+        {
+            "AutoScalingGroupName": "sensu_proxy-asg-20180820080824175500000005",
+            "LaunchTemplate": {
+                "LaunchTemplateId": "lt-06d6ec44c5940bf2b",
+                "LaunchTemplateName": "sensu-proxy-lt",
+                "Version": "9"
+            },
+            "Instances": [
+                {
+                    "InstanceId": "i-0123456789",
+                    "AvailabilityZone": "eu-west-2a",
+                    "LifecycleState": "InService",
+                    "HealthStatus": "Healthy",
+                    "LaunchTemplate": {
+                        "LaunchTemplateId": "lt-06d6ec44c5940bf2b",
+                        "LaunchTemplateName": "sensu-proxy-lt",
+                        "Version": "9"
+                    }
+                }
+            ]
+        },
+        {
+            "AutoScalingGroupName": "tel-sensu-proxy-asg-20181015101138889300000005",
+            "LaunchTemplate": {
+                "LaunchTemplateId": "lt-06d6ec44c5940bf2b",
+                "LaunchTemplateName": "tel-sensu-lt",
+                "Version": "9"
+            },
+            "Instances": [
+                {
+                    "InstanceId": "i-0123456789",
+                    "AvailabilityZone": "eu-west-2a",
+                    "LifecycleState": "InService",
+                    "HealthStatus": "Healthy",
+                    "LaunchTemplate": {
+                        "LaunchTemplateId": "lt-06d6ec44c5940bf2b",
+                        "LaunchTemplateName": "tel-sensu-lt",
+                        "Version": "9"
+                    }
+                }
+            ]
+        },
+        {
+            "AutoScalingGroupName": "sensu-asg-00340a9d51ccc10d09cc6a6197",
+            "LaunchTemplate": {
+                "LaunchTemplateId": "lt-06d6ec44c5940bf2b",
+                "LaunchTemplateName": "sensu-lt",
+                "Version": "9"
+            },
+            "Instances": [
+                {
+                    "InstanceId": "i-0123456789",
+                    "AvailabilityZone": "eu-west-2a",
+                    "LifecycleState": "InService",
+                    "HealthStatus": "Healthy",
+                    "LaunchTemplate": {
+                        "LaunchTemplateId": "lt-06d6ec44c5940bf2b",
+                        "LaunchTemplateName": "sensu-lt",
+                        "Version": "9"
+                    }
+                }
+            ]
+        }
+    ]
+}
