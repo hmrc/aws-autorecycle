@@ -1,0 +1,47 @@
+{
+   "version": "0",
+   "id": "1234-ABCD",
+   "detail-type": "AWS API Call via CloudTrail",
+   "source": "aws.autoscaling",
+   "account": "1234",
+   "time": "2018-04-23T08:01:36Z",
+   "region": "eu-west-2",
+   "resources": [],
+   "detail": {
+      "eventVersion": "1.05",
+      "userIdentity": {
+         "type": "AssumedRole",
+         "principalId": "ABCD:1234",
+         "arn": "arn:aws:sts::1234:assumed-role/service/RoleJenkinsTerraformProvisioner/1234",
+         "accountId": "1234",
+         "accessKeyId": "ABCD",
+         "sessionContext": {
+            "attributes": {
+               "mfaAuthenticated": "false",
+               "creationDate": "2018-04-23T08:01:32Z"
+            },
+            "sessionIssuer": {
+               "type": "Role",
+               "principalId": "ABCD",
+               "arn": "arn:aws:iam::1234:role/service/RoleJenkinsTerraformProvisioner",
+               "accountId": "1234",
+               "userName": "RoleTestRole"
+            }
+         }
+      },
+      "eventTime": "2018-04-23T08:01:36Z",
+      "eventSource": "autoscaling.amazonaws.com",
+      "eventName": "UpdateAutoScalingGroup",
+      "awsRegion": "eu-west-2",
+      "sourceIPAddress": "127.0.0.1",
+      "userAgent": "aws-sdk-go/1.13.21 (go1.9.2; linux; amd64) APN/1.0 HashiCorp/1.0 Terraform/0.11.4",
+      "requestParameters": {
+        "newInstancesProtectedFromScaleIn": false,
+        "autoScalingGroupName": "test-protected-mdtp-asg-20191014094141784800000005"
+      },
+      "responseElements": "None",
+      "requestID": "1234-ABCD",
+      "eventID": "1234",
+      "eventType": "AwsApiCall"
+   }
+}
