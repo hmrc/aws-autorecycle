@@ -20,13 +20,20 @@ data "aws_iam_policy_document" "autorecycle_scale_asg" {
       "autoscaling:DescribeAutoScalingGroups",
       "autoscaling:DescribeScalingActivities",
       "autoscaling:ExecutePolicy",
+    ]
+    effect = "Allow"
+    resources = [
+      "*"
+    ]
+  }
+  statement {
+    actions = [
       "ec2:DescribeInstanceStatus",
     ]
     effect = "Allow"
     resources = [
       "*"
     ]
-    sid = "AllowLambdaToScaleASGs"
   }
 }
 
