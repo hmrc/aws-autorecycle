@@ -4,7 +4,7 @@ module "autorecycle_delayer_lambda" {
   account_engineering_boundary = var.account_engineering_boundary
   environment                  = var.environment
   environment_variables = {
-      payments_sftp = var.payments_delayer_var
+    payments_sftp = var.payments_delayer_var
   }
   function_name                           = "autorecycle-delayer"
   image_command                           = ["autorecycle_delayer.aws_autorecycle_delayer_lambda.lambda_handler"]
