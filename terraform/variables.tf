@@ -26,3 +26,13 @@ variable "slack_channel" {
   description = "Slack channel to post to"
   type        = string
 }
+
+variable "autorecycle_mongo_lambda_vpc_id" {
+  description = "The VPC to run the autorecycle_mongo_lambda in"
+  type        = string
+}
+
+variable "autorecycle_mongo_lambda_subnet_ids" {
+  description = "The subnets to run the autorecycle_mongo_lambda in"
+  type        = list(string)
+}
