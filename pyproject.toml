@@ -33,6 +33,8 @@ safety = "^2.3.5"
 version-incrementor = "^1.6.0"
 freezegun = "^1.2.2"
 types-pytz = "^2023.3.0.0"
+types-requests = "<2.31.0.7"
+types-pyopenssl = "^23.2.0.2"
 
 [tool.black]
 line-length = 88
