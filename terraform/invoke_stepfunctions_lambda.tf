@@ -54,3 +54,46 @@ resource "aws_iam_role_policy" "aws_autorecycle_invoke_stepfunctions_lambda" {
   role   = module.invoke_stepfunctions_lambda.iam_role_id
   policy = data.aws_iam_policy_document.aws_autorecycle_invoke_stepfunctions_lambda_policy.json
 }
+
+# Cloudwatch
+resource "aws_lambda_permission" "allow_cloudwatch" {
+  statement_id  = "AllowExecutionFromCloudWatch"
+  action        = "lambda:InvokeFunction"
+  function_name = module.invoke_stepfunctions_lambda.lambda_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.trigger_aws_autorecycle_invoke_stepfunctions_lambda.arn
+  qualifier     = module.invoke_stepfunctions_lambda.lambda_alias_name
+}
+
+resource "aws_cloudwatch_event_rule" "trigger_aws_autorecycle_invoke_stepfunctions_lambda" {
+  name        = "trigger_aws_autorecycle_invoke_stepfunctions_lambda"
+  description = "aws_autorecycle_invoke_stepfunctions_lambda"
+
+  event_pattern = <<PATTERN
+{
+  "source": [
+    "aws.autoscaling"
+  ],
+  "detail-type": [
+    "AWS API Call via CloudTrail"
+  ],
+  "detail": {
+    "eventSource": [
+      "autoscaling.amazonaws.com"
+    ],
+    "eventName": [
+      "CreateOrUpdateTags",
+      "DeleteTags",
+      "UpdateAutoScalingGroup"
+    ]
+  }
+}
+PATTERN
+
+}
+
+resource "aws_cloudwatch_event_target" "target_aws_autorecycle_invoke_stepfunctions_lambda" {
+  target_id = "target_aws_autorecycle_invoke_stepfunctions_lambda"
+  rule      = aws_cloudwatch_event_rule.trigger_aws_autorecycle_invoke_stepfunctions_lambda.name
+  arn       = module.invoke_stepfunctions_lambda.lambda_alias_arn
+}
