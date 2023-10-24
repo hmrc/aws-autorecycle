@@ -30,7 +30,7 @@ def _silence_sensu_alert_type(component, duration_seconds, check_type):
 def _post_to_sensu(payload, final_check_name):
     headers = {"Content-Type": "application/json"}
     url = "http://sensu:4567/silenced"
-    response = requests.post(url, json=payload, headers=headers)
+    response = requests.post(url, json=payload, headers=headers, timeout=15)
     if response:
         if response.status_code == 201:
             logger.info("Sensu check silenced successfully: " + final_check_name)
