@@ -2,7 +2,7 @@ import logging
 import re
 from typing import Any
 
-import requests  # type: ignore
+import requests
 from tenacity import retry, retry_if_exception, stop_after_attempt, wait_fixed
 
 logger = logging.getLogger(__name__)
