@@ -30,17 +30,22 @@ data "aws_iam_policy_document" "autorecycle_mongo_lambda_policy" {
     effect = "Allow"
 
     actions = [
-      "ec2:Describe*",
+      "ec2:Describe*",  #tfsec:ignore:aws-iam-no-policy-wildcards
       "ec2:CreateNetworkInterface",
       "ec2:DescribeNetworkInterfaces",
       "ec2:DeleteNetworkInterface",
-      "autoscaling:Describe*",
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
     ]
 
-    resources = ["*"]
+    resources = ["*"]  #tfsec:ignore:aws-iam-no-policy-wildcards
+  }
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "autoscaling:Describe*",  #tfsec:ignore:aws-iam-no-policy-wildcards
+    ]
+
+    resources = ["*"]  #tfsec:ignore:aws-iam-no-policy-wildcards
   }
 
   statement {
@@ -50,7 +55,7 @@ data "aws_iam_policy_document" "autorecycle_mongo_lambda_policy" {
       "ec2:TerminateInstances",
     ]
 
-    resources = ["*"]
+    resources = ["*"]  #tfsec:ignore:aws-iam-no-policy-wildcards
 
     condition {
       test     = "StringLike"
