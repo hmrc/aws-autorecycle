@@ -1,18 +1,19 @@
 import logging
 import re
+from typing import Any
 
-import requests
+import requests  # type: ignore
 from tenacity import retry, retry_if_exception, stop_after_attempt, wait_fixed
 
 logger = logging.getLogger(__name__)
 
 
-def silence_sensu_alerts(component, duration_seconds):
+def silence_sensu_alerts(component: str, duration_seconds: int) -> None:
     _silence_sensu_alert_type(component, duration_seconds, check_type="warning")
     _silence_sensu_alert_type(component, duration_seconds, check_type="critical")
 
 
-def _silence_sensu_alert_type(component, duration_seconds, check_type):
+def _silence_sensu_alert_type(component: str, duration_seconds: int, check_type: str) -> Any:
     check_name = re.sub(r"_mongo(_[abc])?$", "", component)
     final_check_name = "infra_check_mongo_replica_set_health_" + check_name + "_" + check_type + "_aggregates"
 
@@ -24,10 +25,10 @@ def _silence_sensu_alert_type(component, duration_seconds, check_type):
 @retry(
     wait=wait_fixed(60),
     stop=stop_after_attempt(8),
-    retry=retry_if_exception(ConnectionError),
+    retry=retry_if_exception(ConnectionError),  # type: ignore
     reraise=False,
 )
-def _post_to_sensu(payload, final_check_name):
+def _post_to_sensu(payload: Any, final_check_name: str) -> Any:
     headers = {"Content-Type": "application/json"}
     url = "http://sensu:4567/silenced"
     response = requests.post(url, json=payload, headers=headers, timeout=15)

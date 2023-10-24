@@ -1,18 +1,20 @@
 import itertools
 import logging
 import time
+from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
 
-def fails_with(fn):
+def fails_with(fn: Any) -> Any:
     try:
         fn()
+        return
     except Exception as e:
         return e
 
 
-def poll(fn, max_iters=50, sleep_for_seconds=None):
+def poll(fn: Any, max_iters: int = 50, sleep_for_seconds: Optional[int] = None) -> Any:
     for i in itertools.count(start=1):
         error = fails_with(fn)
         if error is None:
@@ -27,9 +29,3 @@ def poll(fn, max_iters=50, sleep_for_seconds=None):
 
         if sleep_for_seconds:
             time.sleep(sleep_for_seconds)
-
-
-def run_until(fn, sentinel_value, max_iters=50):
-    for i in range(0, max_iters):
-        if fn() == sentinel_value:
-            return

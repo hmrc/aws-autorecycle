@@ -6,5 +6,5 @@ Instance = namedtuple(
 )
 
 
-def find_instances(instances, mongo_state):
+def find_instances(instances: list[Instance], mongo_state: str) -> list[Instance]:
     return [i for i in instances if i.mongo_state == mongo_state]

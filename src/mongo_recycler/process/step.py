@@ -1,4 +1,5 @@
 import logging
+from typing import Any
 
 import src.mongo_recycler.models.decision
 import src.mongo_recycler.process.decision as decision
@@ -6,6 +7,7 @@ import src.mongo_recycler.process.execute as execute
 import src.mongo_recycler.process.instances
 import src.mongo_recycler.process.pre_step_checks as pre_step_checks
 import src.mongo_recycler.process.replica_set_health as replica_set_health
+from src.mongo_recycler.models.decision import Decision
 from src.mongo_recycler.connectors.aws import AWS
 from src.mongo_recycler.connectors.mongo import Mongo
 from src.mongo_recycler.connectors.sensu import silence_sensu_alerts
@@ -14,7 +16,7 @@ from src.mongo_recycler.utils.logger import json_logger_config
 logger = logging.getLogger(__name__)
 
 
-def step(component):
+def step(component: str) -> Decision:
     aws = AWS(component)
     mongo = Mongo(component)
     cluster_health = replica_set_health.ReplicaSetHealth(aws, mongo)
@@ -34,18 +36,18 @@ def step(component):
     return outcome
 
 
-def increment_counter(event):
+def increment_counter(event: Any) -> Any:
     if "counter" not in event:
         event["counter"] = 0
     event["counter"] += 1
     return event
 
 
-def is_first_run(event):
+def is_first_run(event: Any) -> Any:
     return not event.get("counter")
 
 
-def lambda_handler(event, context):
+def lambda_handler(event: Any, context: Any) -> Any:
     json_logger_config(event, context)
     component = event["component"]
 

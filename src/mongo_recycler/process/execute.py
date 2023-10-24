@@ -1,11 +1,14 @@
 import logging
 
-from src.mongo_recycler.models.decision import DONE, STEP_DOWN_AND_RECYCLE_PRIMARY
+from src.mongo_recycler.connectors.aws import AWS
+from src.mongo_recycler.connectors.mongo import Mongo
+from src.mongo_recycler.models.decision import DONE, STEP_DOWN_AND_RECYCLE_PRIMARY, Decision
+from src.mongo_recycler.process.replica_set_health import ReplicaSetHealth
 
 logger = logging.getLogger(__name__)
 
 
-def execute_action(decision, aws, mongo, cluster_health):
+def execute_action(decision: Decision, aws: AWS, mongo: Mongo, cluster_health: ReplicaSetHealth) -> None:
     if decision.action == DONE:
         return
 

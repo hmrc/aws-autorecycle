@@ -1,7 +1,11 @@
+from typing import Generator
+
+from src.mongo_recycler.connectors.aws import AWS
+from src.mongo_recycler.connectors.mongo import Mongo
 from src.mongo_recycler.models.instances import Instance
 
 
-def fetch_replica_set_status(aws, mongo):
+def fetch_replica_set_status(aws: AWS, mongo: Mongo) -> Generator:
     for instance in aws.get_mongo_db_instances():
         node_details = mongo.get_node_details(instance["IpAddress"])
         yield Instance(
