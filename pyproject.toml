@@ -20,6 +20,7 @@ pymongo = "^4.5.0"
 aws-get-vault-object = "^0.0.2"
 urllib3 = ">=1.25.4,<1.27"
 tenacity = "^8.2.3"
+rfc3339 = "^6.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.2.1"
@@ -35,6 +36,7 @@ freezegun = "^1.2.2"
 types-pytz = "^2023.3.0.0"
 types-requests = "<2.31.0.7"
 types-pyopenssl = "^23.2.0.2"
+aws-lambda-context = "^1.1.0"
 
 [tool.black]
 line-length = 88

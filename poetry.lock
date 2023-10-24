@@ -95,6 +95,25 @@ url = "https://artefacts.tax.service.gov.uk/artifactory/api/pypi/pips/simple"
 reference = "artifactory"
 
 [[package]]
+name = "aws-lambda-context"
+version = "1.1.0"
+description = "AWS Lambda Context class for type checking and testing"
+optional = false
+python-versions = ">= 3.6"
+files = [
+    {file = "aws-lambda-context-1.1.0.tar.gz", hash = "sha256:b6a6d3360671b25bb171335c7e6510b22e60c6fd5db99803f478c986d3230220"},
+    {file = "aws_lambda_context-1.1.0-py3-none-any.whl", hash = "sha256:d03b16aaf8abac30b71bc5d66ed8edadd8805e0d581f73f1e9b4b171635c817d"},
+]
+
+[package.extras]
+tests = ["black (==19.3b0)", "bump2version (==0.5.10)", "flake8 (==3.7.8)", "isort (==4.3.21)", "mypy (==0.720)", "pre-commit (==1.17.0)", "pytest (==5.0.1)", "pytest-cov (==2.7.1)"]
+
+[package.source]
+type = "legacy"
+url = "https://artefacts.tax.service.gov.uk/artifactory/api/pypi/pips/simple"
+reference = "artifactory"
+
+[[package]]
 name = "aws-lambda-logging"
 version = "0.1.1"
 description = "Nanolib to enhance logging in aws lambda"
@@ -1447,6 +1466,22 @@ url = "https://artefacts.tax.service.gov.uk/artifactory/api/pypi/pips/simple"
 reference = "artifactory"
 
 [[package]]
+name = "rfc3339"
+version = "6.2"
+description = "Format dates according to the RFC 3339."
+optional = false
+python-versions = "*"
+files = [
+    {file = "rfc3339-6.2-py3-none-any.whl", hash = "sha256:f44316b21b21db90a625cde04ebb0d46268f153e6093021fa5893e92a96f58a3"},
+    {file = "rfc3339-6.2.tar.gz", hash = "sha256:d53c3b5eefaef892b7240ba2a91fef012e86faa4d0a0ca782359c490e00ad4d0"},
+]
+
+[package.source]
+type = "legacy"
+url = "https://artefacts.tax.service.gov.uk/artifactory/api/pypi/pips/simple"
+reference = "artifactory"
+
+[[package]]
 name = "ruamel-yaml"
 version = "0.17.21"
 description = "ruamel.yaml is a YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order"
@@ -1868,4 +1903,4 @@ reference = "artifactory"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "369f29383112532fbb75955760bea64222487fd639bc65b02f158988c9541caa"
+content-hash = "68e49e3c903e7a3d8deb403eaa7d007a548d8edb56a3bcd5755c908c7be20503"
