@@ -23,7 +23,7 @@ def test_silence_sensu_alert(mock_post):
     mock_post.return_value = mocked_response
 
     silence_sensu_alerts("protected_auth_mongo", 60)
-    mock_post.assert_called_with(expected_endpoint, json=expected_payload, headers=expected_headers)
+    mock_post.assert_called_with(expected_endpoint, json=expected_payload, headers=expected_headers, timeout=15)
 
 
 @patch("requests.post")
