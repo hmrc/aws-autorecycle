@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 import ssl
@@ -8,6 +9,9 @@ import pymongo
 from aws_get_vault_object import get_credentials
 from pymongo.errors import AutoReconnect, ConnectionFailure, OperationFailure
 from tenacity import retry, stop_after_attempt, wait_exponential
+from tenacity.before import before_log
+
+logger = logging.getLogger(__name__)
 
 
 class InstanceStateNotFound(Exception):
@@ -51,9 +55,11 @@ class Mongo:
     def __init__(self, component: str) -> None:
         self.cluster_name = re.sub(r"_mongo(?:_[abc])?$", "", component)
 
-    @retry(wait=wait_exponential(min=0.1, max=1), stop=stop_after_attempt(10))
+    @retry(wait=wait_exponential(min=0.1, max=1), stop=stop_after_attempt(10), before=before_log(logger, logging.DEBUG))
     def _connect(self, connection_string: str) -> pymongo.MongoClient:
         creds = self.get_credentials_from_vault()
+
+        logger.info(f"Connecting to Mongo with connection string [{connection_string}]")
 
         connection_object: pymongo.MongoClient = pymongo.MongoClient(
             connection_string,
