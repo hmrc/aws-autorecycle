@@ -59,7 +59,7 @@ class Mongo:
     def _connect(self, connection_string: str) -> pymongo.MongoClient:
         creds = self.get_credentials_from_vault()
 
-        logger.info(f'Connecting to Mongo with connection string [{connection_string}]')
+        logger.info(f"Connecting to Mongo with connection string [{connection_string}]")
 
         connection_object: pymongo.MongoClient = pymongo.MongoClient(
             connection_string,
