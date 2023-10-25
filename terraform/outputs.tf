@@ -85,3 +85,24 @@ output "autorecycle_mongo_lambda_role" {
 output "autorecycle_mongo_lambda_security_group" {
   value = var.autorecycle_mongo_lambda_vpc_id != null ? module.autorecycle_mongo_lambda[0].security_group_id : null
 }
+
+# autorecycle_delayer_lambda
+output "autorecycle_delayer_lambda_alias_name" {
+  value = module.autorecycle_delayer_lambda.lambda_alias_name
+}
+
+output "autorecycle_delayer_lambda_arn" {
+  value = module.autorecycle_delayer_lambda.lambda_alias_arn
+}
+
+output "autorecycle_delayer_lambda_name" {
+  value = module.autorecycle_delayer_lambda.lambda_name
+}
+
+output "autorecycle_delayer_lambda_role_arn" {
+  value = module.autorecycle_delayer_lambda.iam_role_arn
+}
+
+output "autorecycle_delayer_lambda_role" {
+  value = module.autorecycle_delayer_lambda.iam_role_id
+}
