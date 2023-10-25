@@ -63,25 +63,25 @@ output "autorecycle_scale_asg_lambda_role" {
 
 #autorecycle_mongo_lambda
 output "autorecycle_mongo_lambda_alias_name" {
-  value = module.autorecycle_mongo_lambda[0].lambda_alias_name
+  value = var.autorecycle_mongo_lambda_vpc_id != null ? module.autorecycle_mongo_lambda[0].lambda_alias_name : null
 }
 
 output "autorecycle_mongo_lambda_arn" {
-  value = module.autorecycle_mongo_lambda[0].lambda_alias_arn
+  value = var.autorecycle_mongo_lambda_vpc_id != null ? module.autorecycle_mongo_lambda[0].lambda_alias_arn : null
 }
 
 output "autorecycle_mongo_lambda_name" {
-  value = module.autorecycle_mongo_lambda[0].lambda_name
+  value = var.autorecycle_mongo_lambda_vpc_id != null ? module.autorecycle_mongo_lambda[0].lambda_name : null
 }
 
 output "autorecycle_mongo_lambda_role_arn" {
-  value = module.autorecycle_mongo_lambda[0].iam_role_arn
+  value = var.autorecycle_mongo_lambda_vpc_id != null ? module.autorecycle_mongo_lambda[0].iam_role_arn : null
 }
 
 output "autorecycle_mongo_lambda_role" {
-  value = module.autorecycle_mongo_lambda[0].iam_role_id
+  value = var.autorecycle_mongo_lambda_vpc_id != null ? module.autorecycle_mongo_lambda[0].iam_role_id : null
 }
 
 output "autorecycle_mongo_lambda_security_group" {
-  value = module.autorecycle_mongo_lambda[0].security_group_id
+  value = var.autorecycle_mongo_lambda_vpc_id != null ? module.autorecycle_mongo_lambda[0].security_group_id : null
 }
