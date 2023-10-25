@@ -1,4 +1,5 @@
 module "autorecycle_mongo_lambda" {
+  count  = var.autorecycle_mongo_lambda_vpc_id != null ? 1 : 0
   source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
 
   account_engineering_boundary = var.account_engineering_boundary
@@ -20,7 +21,8 @@ module "autorecycle_mongo_lambda" {
 }
 
 resource "aws_lambda_function_event_invoke_config" "autorecycle_mongo_lambda" {
-  function_name                = module.autorecycle_mongo_lambda.lambda_name
+  count                        = var.autorecycle_mongo_lambda_vpc_id != null ? 1 : 0
+  function_name                = module.autorecycle_mongo_lambda[0].lambda_name
   maximum_event_age_in_seconds = 300
   maximum_retry_attempts       = 0
 }
@@ -69,6 +71,7 @@ data "aws_iam_policy_document" "autorecycle_mongo_lambda_policy" {
 }
 
 resource "aws_iam_role_policy" "autorecycle_mongo_lambda" {
-  role   = module.autorecycle_mongo_lambda.iam_role_id
+  count  = var.autorecycle_mongo_lambda_vpc_id != null ? 1 : 0
+  role   = module.autorecycle_mongo_lambda[0].iam_role_id
   policy = data.aws_iam_policy_document.autorecycle_mongo_lambda_policy.json
 }
