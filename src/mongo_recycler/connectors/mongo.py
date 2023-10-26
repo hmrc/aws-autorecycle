@@ -55,7 +55,7 @@ class Mongo:
     def __init__(self, component: str) -> None:
         self.cluster_name = re.sub(r"_mongo(?:_[abc])?$", "", component)
 
-    @retry(wait=wait_exponential(min=0.1, max=1), stop=stop_after_attempt(10), before=before_log(logger, logging.DEBUG))
+    @retry(wait=wait_exponential(min=0.1, max=1), stop=stop_after_attempt(10), before=before_log(logger, logging.INFO))
     def _connect(self, connection_string: str) -> pymongo.MongoClient:
         creds = self.get_credentials_from_vault()
 
