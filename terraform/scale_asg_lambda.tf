@@ -4,6 +4,7 @@ module "autorecycle_scale_asg_lambda" {
   account_engineering_boundary = var.account_engineering_boundary
   environment                  = var.environment
   environment_variables = {
+    ENVIRONMENT = var.environment
   }
   function_name                           = "autorecycle-scale-asg"
   image_command                           = ["autorecycle_scale_asg.handler.lambda_handler"]
