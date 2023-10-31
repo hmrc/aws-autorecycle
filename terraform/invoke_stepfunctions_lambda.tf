@@ -1,5 +1,3 @@
-data "aws_caller_identity" "current" {}
-
 module "invoke_stepfunctions_lambda" {
   source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
 

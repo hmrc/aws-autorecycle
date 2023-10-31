@@ -106,3 +106,24 @@ output "autorecycle_delayer_lambda_role_arn" {
 output "autorecycle_delayer_lambda_role" {
   value = module.autorecycle_delayer_lambda.iam_role_id
 }
+
+# autorecycle_lambda
+output "autorecycle_lambda_alias_name" {
+  value = module.autorecycle_lambda.lambda_alias_name
+}
+
+output "autorecycle_lambda_arn" {
+  value = module.autorecycle_lambda.lambda_alias_arn
+}
+
+output "autorecycle_lambda_name" {
+  value = module.autorecycle_lambda.lambda_name
+}
+
+output "autorecycle_lambda_role_arn" {
+  value = module.autorecycle_lambda.iam_role_arn
+}
+
+output "autorecycle_lambda_role" {
+  value = module.autorecycle_lambda.iam_role_id
+}
