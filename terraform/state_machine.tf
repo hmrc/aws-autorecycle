@@ -697,7 +697,7 @@ data "aws_iam_policy_document" "allow_step_function_to_invoke_lambdas" {
       "lambda:InvokeFunction"
     ]
     effect = "Allow"
-    resources = [
+    resources = compact([
       var.start_instance_refresh_lambda_arn,
       var.cancel_instance_refresh_lambda_arn,
       var.get_instance_refresh_status_lambda_arn,
@@ -706,7 +706,7 @@ data "aws_iam_policy_document" "allow_step_function_to_invoke_lambdas" {
       var.autorecycle_mongo_lambda_vpc_id != null ? module.autorecycle_mongo_lambda[0].lambda_alias_arn : null,
       module.monitor_autorecycle_lambda.lambda_alias_arn,
       module.autorecycle_scale_asg_lambda.lambda_alias_arn
-    ]
+    ])
   }
 }
 
