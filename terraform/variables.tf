@@ -47,31 +47,37 @@ variable "slack_notifications_lambda" {
 variable "get_instance_refresh_status_lambda_arn" {
   description = "The ARN of the get_instance_refresh_status lambda (We should migrate this lambda into this repo)"
   type        = string
+  default     = null
 }
 
 variable "get_instance_refresh_status_lambda_name" {
   description = "The name of the get_instance_refresh_status lambda (We should migrate this lambda into this repo)"
   type        = string
+  default     = ""
 }
 
 variable "cancel_instance_refresh_lambda_arn" {
   description = "The ARN of the cancel_instance_refresh lambda (We should migrate this lambda into this repo)"
   type        = string
+  default     = null
 }
 
 variable "cancel_instance_refresh_lambda_name" {
   description = "The name of the cancel_instance_refresh lambda (We should migrate this lambda into this repo)"
   type        = string
+  default     = ""
 }
 
 variable "start_instance_refresh_lambda_arn" {
   description = "The ARN of the start_instance_refresh lambda (We should migrate this lambda into this repo)"
   type        = string
+  default     = null
 }
 
 variable "start_instance_refresh_lambda_name" {
   description = "The name of the start_instance_refresh lambda (We should migrate this lambda into this repo)"
   type        = string
+  default     = ""
 }
 
 variable "payments_delayer_var" {
