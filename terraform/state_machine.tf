@@ -269,7 +269,7 @@ resource "aws_sfn_state_machine" "auto_recycle" {
     "Recycle Mongo Cluster": {
       "Comment": "Recycles the given Mongo Cluster",
       "Type": "Task",
-      "Resource": "${var.autorecycle_mongo_lambda_vpc_id != null ? module.autorecycle_mongo_lambda[0].lambda_alias_arn : ""}",
+      "Resource": "${var.autorecycle_mongo_lambda_vpc_id != null ? module.autorecycle_mongo_lambda[0].lambda_alias_arn : aws_lambda_function.dummy_lambda.arn}",
       "OutputPath": "$",
       "ResultPath": "$",
       "TimeoutSeconds": 900,
@@ -334,7 +334,7 @@ resource "aws_sfn_state_machine" "auto_recycle" {
     "Instance Refresh Start": {
       "Comment": "Invokes the start instance refresh method to trigger asg update",
       "Type": "Task",
-      "Resource": "${var.start_instance_refresh_lambda_arn}",
+      "Resource": "${var.start_instance_refresh_lambda_arn != null ? var.start_instance_refresh_lambda_arn : aws_lambda_function.dummy_lambda.arn}",
       "OutputPath": "$",
       "ResultPath": "$.${var.start_instance_refresh_lambda_name}-output",
       "Next": "Was a refresh started?",
@@ -369,7 +369,7 @@ resource "aws_sfn_state_machine" "auto_recycle" {
     "Instance Refresh Cancel": {
       "Comment": "Invokes the cancel instance refresh method to trigger asg update",
       "Type": "Task",
-      "Resource": "${var.cancel_instance_refresh_lambda_arn}",
+      "Resource": "${var.cancel_instance_refresh_lambda_arn != null ? var.cancel_instance_refresh_lambda_arn : aws_lambda_function.dummy_lambda.arn}",
       "InputPath": "$.${var.get_instance_refresh_status_lambda_name}-output",
       "OutputPath": "$",
       "ResultPath": "$.${var.cancel_instance_refresh_lambda_name}-output",
@@ -391,7 +391,7 @@ resource "aws_sfn_state_machine" "auto_recycle" {
     "Monitor Instance Refresh Progress": {
       "Comment": "Checks whether the instance refresh has completed",
       "Type": "Task",
-      "Resource": "${var.get_instance_refresh_status_lambda_arn}",
+      "Resource": "${var.get_instance_refresh_status_lambda_arn != null ? var.get_instance_refresh_status_lambda_arn : aws_lambda_function.dummy_lambda.arn}",
       "InputPath": "$.${var.start_instance_refresh_lambda_name}-output",
       "OutputPath": "$",
       "ResultPath": "$.${var.get_instance_refresh_status_lambda_name}-output",
@@ -412,7 +412,7 @@ resource "aws_sfn_state_machine" "auto_recycle" {
     "Monitor Instance Refresh Status": {
       "Comment": "Checks whether the instance refresh running",
       "Type": "Task",
-      "Resource": "${var.get_instance_refresh_status_lambda_arn}",
+      "Resource": "${var.get_instance_refresh_status_lambda_arn != null ? var.get_instance_refresh_status_lambda_arn : aws_lambda_function.dummy_lambda.arn}",
       "InputPath": "$",
       "OutputPath": "$",
       "ResultPath": "$.${var.get_instance_refresh_status_lambda_name}-output",
@@ -735,3 +735,24 @@ resource "aws_cloudwatch_metric_alarm" "autorecyle_cloudwatch_alarm" {
   statistic          = "Maximum"
 }
 
+
+# Dummy lambda to cover for the missing lambdas in management
+data "archive_file" "dummy_lambda" {
+  type        = "zip"
+  output_path = "lambda_function_payload.zip"
+
+  source {
+    content  = "dummy"
+    filename = "dummy.py"
+  }
+}
+
+resource "aws_lambda_function" "dummy_lambda" {
+  filename      = "lambda_function_payload.zip"
+  function_name = "lambda_function_name"
+  role          = module.autorecycle_lambda.iam_role_arn
+  handler       = "dummy"
+  runtime       = "python3.10"
+
+  source_code_hash = data.archive_file.dummy_lambda.output_base64sha256
+}
