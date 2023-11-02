@@ -127,3 +127,8 @@ output "autorecycle_lambda_role_arn" {
 output "autorecycle_lambda_role" {
   value = module.autorecycle_lambda.iam_role_id
 }
+
+# State Machine
+output "autorecycle_sfn_id" {
+  value = aws_sfn_state_machine.auto_recycle.id
+}

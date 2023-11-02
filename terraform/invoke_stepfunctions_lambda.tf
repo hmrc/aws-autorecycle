@@ -43,7 +43,7 @@ data "aws_iam_policy_document" "aws_autorecycle_invoke_stepfunctions_lambda_poli
     ]
 
     resources = [
-      var.state_machine_id
+      aws_sfn_state_machine.auto_recycle.id
     ]
   }
 }
