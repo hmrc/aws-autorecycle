@@ -17,13 +17,13 @@ variable "log_subscription_filter_destination_arn" {
   type        = string
 }
 
-variable "state_machine_id" {
-  description = "ID of the state machine the lambda will start"
+variable "slack_channel" {
+  description = "Slack channel to post to"
   type        = string
 }
 
-variable "slack_channel" {
-  description = "Slack channel to post to"
+variable "slack_error_channel" {
+  description = "Slack channel to post errors to"
   type        = string
 }
 
@@ -37,6 +37,41 @@ variable "autorecycle_mongo_lambda_subnet_ids" {
   description = "The subnets to run the autorecycle_mongo_lambda in"
   type        = list(string)
   default     = null
+}
+
+variable "slack_notifications_lambda" {
+  description = "The ARN of the Slack notifications Lambda"
+  type        = string
+}
+
+variable "get_instance_refresh_status_lambda_arn" {
+  description = "The ARN of the get_instance_refresh_status lambda (We should migrate this lambda into this repo)"
+  type        = string
+}
+
+variable "get_instance_refresh_status_lambda_name" {
+  description = "The name of the get_instance_refresh_status lambda (We should migrate this lambda into this repo)"
+  type        = string
+}
+
+variable "cancel_instance_refresh_lambda_arn" {
+  description = "The ARN of the cancel_instance_refresh lambda (We should migrate this lambda into this repo)"
+  type        = string
+}
+
+variable "cancel_instance_refresh_lambda_name" {
+  description = "The name of the cancel_instance_refresh lambda (We should migrate this lambda into this repo)"
+  type        = string
+}
+
+variable "start_instance_refresh_lambda_arn" {
+  description = "The ARN of the start_instance_refresh lambda (We should migrate this lambda into this repo)"
+  type        = string
+}
+
+variable "start_instance_refresh_lambda_name" {
+  description = "The name of the start_instance_refresh lambda (We should migrate this lambda into this repo)"
+  type        = string
 }
 
 variable "payments_delayer_var" {
