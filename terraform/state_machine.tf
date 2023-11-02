@@ -269,7 +269,7 @@ resource "aws_sfn_state_machine" "auto_recycle" {
     "Recycle Mongo Cluster": {
       "Comment": "Recycles the given Mongo Cluster",
       "Type": "Task",
-      "Resource": "${var.autorecycle_mongo_lambda_vpc_id != null ? module.autorecycle_mongo_lambda[0].lambda_alias_arn : null}",
+      "Resource": "${var.autorecycle_mongo_lambda_vpc_id != null ? module.autorecycle_mongo_lambda[0].lambda_alias_arn : ""}",
       "OutputPath": "$",
       "ResultPath": "$",
       "TimeoutSeconds": 900,
