@@ -749,7 +749,7 @@ data "archive_file" "dummy_lambda" {
 
 resource "aws_lambda_function" "dummy_lambda" {
   filename      = "lambda_function_payload.zip"
-  function_name = "lambda_function_name"
+  function_name = "autorecycle_dummy_lambda"
   role          = module.autorecycle_lambda.iam_role_arn
   handler       = "dummy"
   runtime       = "python3.10"
