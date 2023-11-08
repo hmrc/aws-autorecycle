@@ -28,7 +28,7 @@ terraform-fmt-check:
 	docker run -v ${PWD}:/src -w /src/terraform hashicorp/terraform:$(TERRAFORM_VERSION) fmt -recursive -check
 
 terraform-validate:
-	cd terraform && tfswitch
+	cd terraform && tfenv install $(TERRAFORM_VERSION)
 	cd terraform && terraform init -backend=false
 	cd terraform && terraform validate
 
