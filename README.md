@@ -127,5 +127,4 @@ autorecycle_dry_run: "true" or "false"
 The strategy key above defines the method for recycling and is used by the step function to choose the path to take.
 
 * out-in - this will double the size of an autoscaling group to scale up and halve the size of the autoscaling group to scale down. This is the standard default method.
-* out-in-timed - the same as out-in but with an exclusion window, used by payments-sftp
 * in-out - one at a time instance scaling in and then out. Used where we have ENI e.g. rate_hods_proxy

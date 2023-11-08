@@ -79,7 +79,3 @@ variable "start_instance_refresh_lambda_name" {
   type        = string
   default     = ""
 }
-
-variable "payments_delayer_var" {
-  default = "09:45:00, 11:15:00, 11:30:00"
-}
