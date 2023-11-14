@@ -115,3 +115,7 @@ output "autorecycle_sfn_id" {
 output "step_machine_iam_role" {
   value = aws_iam_role.step_machine.arn
 }
+
+output "step_machine_iam_role_name" {
+  value = aws_iam_role.step_machine.name
+}
