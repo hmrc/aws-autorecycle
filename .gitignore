@@ -33,3 +33,4 @@ venv/
 .version
 *.zip
 *.zip.base64sha256
+poetry.lock
