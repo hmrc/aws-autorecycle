@@ -1,4 +1,4 @@
-FROM 419929493928.dkr.ecr.eu-west-2.amazonaws.com/aws-lambda-dev-base:latest AS dev
+FROM aws-autocycle-lambda-dev AS dev
 
 WORKDIR ${LAMBDA_TASK_ROOT}
 
@@ -8,7 +8,7 @@ RUN poetry install --no-root && poetry export -o requirements.txt
 COPY src src
 COPY tests tests
 
-FROM 419929493928.dkr.ecr.eu-west-2.amazonaws.com/aws-lambda-release-base:latest AS release
+FROM aws-autocycle-lambda-release AS release
 
 WORKDIR ${LAMBDA_TASK_ROOT}
 
