@@ -1,3 +1,9 @@
 #!/usr/bin/env groovy
 
-buildLambda(repo_name: "aws-autorecycle", validate_terraform: true)
+buildLambda(
+  prepareStage: { env ->
+    sh("./batect build-dev-image")
+  },
+  repo_name: "aws-autorecycle",
+  validate_terraform: true
+)

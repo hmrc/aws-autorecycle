@@ -1,6 +1,11 @@
 forbid_telemetry: true
 project_name: aws-autocycle-lambda
 
+include:
+  - type: git
+    repo: git@github.com:hmrc/infrastructure-pipeline-lambda-build
+    ref: main
+
 containers:
   lambda: &lambda
     build_directory: .
@@ -19,17 +24,21 @@ containers:
   linter:
     build_directory: .
     build_target: dev
+    entrypoint: /bin/sh -c
     volumes:
       - local: src
         container: /devtools/src
       - local: tests
         container: /devtools/tests
+    working_directory: /devtools
 
 tasks:
   lambda-local:
     dependencies:
       - lambda-local
     description: Start the integration dependencies to run integration tests via your editor
+    prerequisites:
+      - build-dev-image
     run:
       container: test
       entrypoint: /bin/sh
@@ -37,25 +46,29 @@ tasks:
     dependencies:
       - lambda
     description: Run the integration tests
+    prerequisites:
+      - build-dev-image
     run:
       command: run pytest -v tests/integration
       container: test
   test-unit:
     description: Run the unit tests
+    prerequisites:
+      - build-dev-image
     run:
       command: run pytest -v tests/unit
       container: test
   test-lint:
     description: Runs the included linting tests
+    prerequisites:
+      - build-dev-image
     run:
       command: "'make lint'"
       container: linter
-      entrypoint: /bin/sh -c
-      working_directory: /devtools
   fix-lint:
     description: Fix linting issues with isort and black
+    prerequisites:
+      - build-dev-image
     run:
       command: "'make fix-lint'"
       container: linter
-      entrypoint: /bin/sh -c
-      working_directory: /devtools
