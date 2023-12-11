@@ -12,6 +12,7 @@ from src.monitor_autorecycle.main import (
     check_instances,
     config,
     lambda_handler,
+    ScaledDownASGException
 )
 from tests.test_data.monitor_autorecycle.describe_asg_lc import launch_configuration_asgs
 from tests.test_data.monitor_autorecycle.describe_asg_lt import launch_template_asgs
@@ -599,6 +600,27 @@ class DescribeAsg(unittest.TestCase):
         test_response = _describe_asg(component)
         self.assertEqual(test_response["Instances"][0]["LaunchTemplate"]["Version"], "10")
 
+    @patch("boto3.client")
+    def test_describe_scaled_down(self, mock_boto_client):
+        response = {
+            "AutoScalingGroups": [
+                {
+                    "AutoScalingGroupName": "public-mdtp-noinstances-asg-123",
+                    "LaunchTemplate": {"Version": "10"},
+                    "MaxSize": 0,
+                    "Instances": [],
+                },
+            ]
+        }
+
+        component = "public-mdtp-noinstances"
+        mock_boto_client().get_paginator.return_value.paginate.return_value = [
+            response,
+            response,
+        ]
+
+        with self.assertRaises(ScaledDownASGException):
+            _describe_asg(component)
 
 @patch("boto3.client")
 class DescribeScalingActivities(unittest.TestCase):

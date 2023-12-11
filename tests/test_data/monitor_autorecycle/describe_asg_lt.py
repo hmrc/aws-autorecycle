@@ -7,6 +7,7 @@ def launch_template_asgs():
             {
                 "AutoScalingGroupName": "public-mdtp-uptodate-asg-123",
                 "LaunchTemplate": {"Version": "10"},
+                "MaxSize": 2,
                 "Instances": [
                     {
                         "InstanceId": "i-9",
@@ -29,6 +30,7 @@ def launch_template_asgs():
             {
                 "AutoScalingGroupName": "public-mdtp-not-uptodate-asg-123",
                 "LaunchTemplate": {"Version": "10"},
+                "MaxSize": 2,
                 "Instances": [
                     {
                         "InstanceId": "i-9",
@@ -51,6 +53,7 @@ def launch_template_asgs():
             {
                 "AutoScalingGroupName": "public-mdtp-unhealthy-asg-123",
                 "LaunchTemplate": {"Version": "10"},
+                "MaxSize": 2,
                 "Instances": [
                     {
                         "InstanceId": "i-11",
@@ -73,6 +76,7 @@ def launch_template_asgs():
             {
                 "AutoScalingGroupName": "public-mdtp-terminating-asg-123",
                 "LaunchTemplate": {"Version": "10"},
+                "MaxSize": 2,
                 "Instances": [
                     {
                         "InstanceId": "i-13",
@@ -95,6 +99,7 @@ def launch_template_asgs():
             {
                 "AutoScalingGroupName": "public-mdtp-NotInService-asg-123",
                 "LaunchTemplate": {"Version": "10"},
+                "MaxSize": 2,
                 "Instances": [
                     {
                         "InstanceId": "i-11",

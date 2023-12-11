@@ -6,6 +6,7 @@ def launch_configuration_asgs():
         "AutoScalingGroups": [
             {
                 "AutoScalingGroupName": "public_routing_proxy_healthy-asg-123",
+                "MaxSize": 2,
                 "Instances": [
                     {
                         "InstanceId": "i-1",
@@ -27,6 +28,7 @@ def launch_configuration_asgs():
             },
             {
                 "AutoScalingGroupName": "public_routing_proxy_unhealthy-asg-123",
+                "MaxSize": 2,
                 "Instances": [
                     {
                         "InstanceId": "i-3",
@@ -48,6 +50,7 @@ def launch_configuration_asgs():
             },
             {
                 "AutoScalingGroupName": "public_routing_proxy_terminating-asg-123",
+                "MaxSize": 2,
                 "Instances": [
                     {
                         "InstanceId": "i-5",
@@ -69,6 +72,7 @@ def launch_configuration_asgs():
             },
             {
                 "AutoScalingGroupName": "public_routing_proxy_no_lc-asg-123",
+                "MaxSize": 2,
                 "Instances": [
                     {
                         "InstanceId": "i-7",
@@ -89,6 +93,7 @@ def launch_configuration_asgs():
             },
             {
                 "AutoScalingGroupName": "public_routing_proxy-asg-123",
+                "MaxSize": 1,
                 "Instances": [
                     {
                         "InstanceId": "i-9",

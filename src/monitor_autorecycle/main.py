@@ -12,6 +12,7 @@ config = Config(retries={"max_attempts": 60, "mode": "standard"})
 logger = logging.getLogger("monitor_autorecycle")
 logger.setLevel(logging.INFO)
 
+class ScaledDownASGException(Exception): pass
 
 def lambda_handler(event: Any, context: Any) -> Any:
     aws_lambda_logging.setup(
@@ -103,12 +104,16 @@ def _monitor_autorecycle(event: Any) -> Any:
         output["recycle_success"] = False
         return output
 
-    if check(event["component"]):
-        logger.info("All Instances in the ASG are Healthy and InService")
-        output["message_content"]["text"] = "Autorecycling has successfully completed"
+    try:
+        if check(event["component"]):
+            logger.info("All Instances in the ASG are Healthy and InService")
+            output["message_content"]["text"] = "Autorecycling has successfully completed"
+            output["recycle_success"] = True
+        else:
+            output["recycle_success"] = False
+    except ScaledDownASGException:
+        output["message_content"]["text"] = "The ASG is scaled down to 0 instances, auto-recycling is not required"
         output["recycle_success"] = True
-    else:
-        output["recycle_success"] = False
 
     return output
 
@@ -127,6 +132,10 @@ def _describe_asg(component: str) -> Any:
 
     if lookup:
         logger.info("Found an ASG called: {}".format(lookup[0]["AutoScalingGroupName"]))
+
+        if lookup[0]["MaxSize"] == 0:
+            logger.info("The ASG is scaled down to 0 instances - not attempting to recycle")
+            raise ScaledDownASGException()
 
         if lookup[0]["Instances"]:
             logger.info("We have found {} instances in the ASG".format(len(lookup[0]["Instances"])))
