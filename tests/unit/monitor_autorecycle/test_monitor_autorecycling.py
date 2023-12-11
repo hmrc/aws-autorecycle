@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from unittest.mock import MagicMock, call, patch
 
 from src.monitor_autorecycle.main import (
+    ScaledDownASGException,
     _compare_start_times,
     _describe_asg,
     _describe_scaling_activities,
@@ -12,7 +13,6 @@ from src.monitor_autorecycle.main import (
     check_instances,
     config,
     lambda_handler,
-    ScaledDownASGException
 )
 from tests.test_data.monitor_autorecycle.describe_asg_lc import launch_configuration_asgs
 from tests.test_data.monitor_autorecycle.describe_asg_lt import launch_template_asgs
@@ -621,6 +621,7 @@ class DescribeAsg(unittest.TestCase):
 
         with self.assertRaises(ScaledDownASGException):
             _describe_asg(component)
+
 
 @patch("boto3.client")
 class DescribeScalingActivities(unittest.TestCase):

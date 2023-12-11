@@ -12,7 +12,10 @@ config = Config(retries={"max_attempts": 60, "mode": "standard"})
 logger = logging.getLogger("monitor_autorecycle")
 logger.setLevel(logging.INFO)
 
-class ScaledDownASGException(Exception): pass
+
+class ScaledDownASGException(Exception):
+    pass
+
 
 def lambda_handler(event: Any, context: Any) -> Any:
     aws_lambda_logging.setup(
