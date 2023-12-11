@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from unittest.mock import MagicMock, call, patch
 
 from src.monitor_autorecycle.main import (
+    ScaledDownASGException,
     _compare_start_times,
     _describe_asg,
     _describe_scaling_activities,
@@ -598,6 +599,28 @@ class DescribeAsg(unittest.TestCase):
         ]
         test_response = _describe_asg(component)
         self.assertEqual(test_response["Instances"][0]["LaunchTemplate"]["Version"], "10")
+
+    @patch("boto3.client")
+    def test_describe_scaled_down(self, mock_boto_client):
+        response = {
+            "AutoScalingGroups": [
+                {
+                    "AutoScalingGroupName": "public-mdtp-noinstances-asg-123",
+                    "LaunchTemplate": {"Version": "10"},
+                    "MaxSize": 0,
+                    "Instances": [],
+                },
+            ]
+        }
+
+        component = "public-mdtp-noinstances"
+        mock_boto_client().get_paginator.return_value.paginate.return_value = [
+            response,
+            response,
+        ]
+
+        with self.assertRaises(ScaledDownASGException):
+            _describe_asg(component)
 
 
 @patch("boto3.client")
