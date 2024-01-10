@@ -1,10 +1,10 @@
 module "monitor_autorecycle_lambda" {
   source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
 
-  account_engineering_boundary = var.account_engineering_boundary
-  environment                  = var.environment
-  environment_variables = {
-  }
+  account_engineering_boundary            = var.account_engineering_boundary
+  environment                             = var.environment
+  environment_variables                   = {}
+  error_alarm_runbook                     = local.runbook_url
   function_name                           = "monitor-autorecycle"
   image_command                           = ["monitor_autorecycle.main.lambda_handler"]
   image_uri                               = "419929493928.dkr.ecr.eu-west-2.amazonaws.com/aws-autorecycle:${var.image_tag}"

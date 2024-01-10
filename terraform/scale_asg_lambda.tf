@@ -6,6 +6,7 @@ module "autorecycle_scale_asg_lambda" {
   environment_variables = {
     ENVIRONMENT = var.environment
   }
+  error_alarm_runbook                     = local.runbook_url
   function_name                           = "autorecycle-scale-asg"
   image_command                           = ["autorecycle_scale_asg.handler.lambda_handler"]
   image_uri                               = "419929493928.dkr.ecr.eu-west-2.amazonaws.com/aws-autorecycle:${var.image_tag}"
