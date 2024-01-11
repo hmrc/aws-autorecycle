@@ -6,21 +6,25 @@ from src.mongo_recycler.process.replica_set_health import (
     NodeNotHealthy,
     PrimaryError,
     ReplicaSetHealth,
+    SecondaryNotHealthy,
     assert_replica_set_healthy,
 )
 
 
 def create_replica_set_status(names_and_statuses):
     return {
-        "members": [{"name": name, "stateStr": status} for name, status in names_and_statuses],
+        "members": [
+            {"name": name, "stateStr": status, "syncSourceHost": syncSourceHost}
+            for name, status, syncSourceHost in names_and_statuses
+        ],
         "ok": 1.0,
     }
 
 
 names_and_statuses = [
-    ("protected-mongo-a", "PRIMARY"),
-    ("protected-mongo-b", "SECONDARY"),
-    ("protected-mongo-c", "ARBITER"),
+    ("protected-mongo-a", "PRIMARY", ""),
+    ("protected-mongo-b", "SECONDARY", "foo"),
+    ("protected-mongo-c", "ARBITER", ""),
 ]
 
 
@@ -38,7 +42,7 @@ def test_assert_replica_set_healthy_fails_if_not_all_nodes_in_primary_secondary_
         "ROLLBACK",
         "REMOVED",
     ]:
-        invalid_names_and_statuses = names_and_statuses + [("protected-mongo-d", status)]
+        invalid_names_and_statuses = names_and_statuses + [("protected-mongo-d", status, "foo")]
 
         with pytest.raises(NodeNotHealthy) as e_info:
             assert_replica_set_healthy(create_replica_set_status(invalid_names_and_statuses))
@@ -48,9 +52,9 @@ def test_assert_replica_set_healthy_fails_if_not_all_nodes_in_primary_secondary_
 
 def test_assert_replica_set_healthy_fails_with_no_primary():
     names_and_statuses = [
-        ("protected-mongo-a", "SECONDARY"),
-        ("protected-mongo-b", "SECONDARY"),
-        ("protected-mongo-c", "ARBITER"),
+        ("protected-mongo-a", "SECONDARY", "foo"),
+        ("protected-mongo-b", "SECONDARY", "foo"),
+        ("protected-mongo-c", "ARBITER", ""),
     ]
 
     with pytest.raises(PrimaryError) as e_info:
@@ -61,15 +65,28 @@ def test_assert_replica_set_healthy_fails_with_no_primary():
 
 def test_assert_replica_set_healthy_fails_with_too_many_primaries():
     names_and_statuses = [
-        ("protected-mongo-a", "PRIMARY"),
-        ("protected-mongo-b", "SECONDARY"),
-        ("protected-mongo-c", "PRIMARY"),
+        ("protected-mongo-a", "PRIMARY", ""),
+        ("protected-mongo-b", "SECONDARY", "foo"),
+        ("protected-mongo-c", "PRIMARY", ""),
     ]
 
     with pytest.raises(PrimaryError) as e_info:
         assert_replica_set_healthy(create_replica_set_status(names_and_statuses))
 
     assert str(e_info.value) == "primary error, 2 primaries found"
+
+
+def test_assert_replica_set_healthy_fails_with_secondary_having_no_sync_source():
+    names_and_statuses = [
+        ("protected-mongo-a", "PRIMARY", ""),
+        ("protected-mongo-b", "SECONDARY", ""),
+        ("protected-mongo-c", "PRIMARY", ""),
+    ]
+
+    with pytest.raises(SecondaryNotHealthy) as e_info:
+        assert_replica_set_healthy(create_replica_set_status(names_and_statuses))
+
+    assert str(e_info.value) == "protected-mongo-b is secondary but has no syncSourceHost"
 
 
 def test_assert_healthy():
@@ -91,9 +108,9 @@ def test_assert_healthy():
 
     mock_mongo().replica_set_status.return_value = create_replica_set_status(
         [
-            ("protected-mongo-a", "PRIMARY"),
-            ("protected-mongo-b", "SECONDARY"),
-            ("protected-mongo-c", "PRIMARY"),
+            ("protected-mongo-a", "PRIMARY", ""),
+            ("protected-mongo-b", "SECONDARY", "foo"),
+            ("protected-mongo-c", "PRIMARY", ""),
         ]
     )
 
