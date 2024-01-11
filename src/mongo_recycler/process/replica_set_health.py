@@ -13,6 +13,10 @@ class PrimaryError(Exception):
     pass
 
 
+class SecondaryNotHealthy(Exception):
+    pass
+
+
 healthy_states = {"PRIMARY", "SECONDARY", "ARBITER"}
 
 
@@ -27,6 +31,12 @@ def assert_all_nodes_healthy(replica_set_members: list[Any]) -> None:
         state = member["stateStr"]
         if state not in healthy_states:
             raise NodeNotHealthy("{name} is in unhealthy state {state}".format(name=member["name"], state=state))
+        if state == "SECONDARY":
+            if "syncSourceHost" in member:
+                if member["syncSourceHost"] == "":
+                    raise SecondaryNotHealthy(
+                        "{name} is secondary but has no syncSourceHost".format(name=member["name"])
+                    )
 
 
 def assert_replica_set_healthy(replica_set_status: Any) -> None:
