@@ -87,10 +87,6 @@ class Mongo:
         client = self._connect(connection_string)
         return client.admin.command("replSetGetStatus")
 
-    def replication_status(self, connection_string: str) -> Any:
-        client = self._connect(connection_string)
-        return client.admin.command("printSecondaryReplicationInfo")
-
     def get_node_details(self, ip_address: str) -> Any:
         client = self._connect(ip_address)
         instance_status = client.admin.command("replSetGetStatus")

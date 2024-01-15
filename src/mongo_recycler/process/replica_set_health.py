@@ -55,8 +55,6 @@ class ReplicaSetHealth:
         host = ",".join(i["IpAddress"] for i in instances)
         replica_set_status = self.mongo.replica_set_status(host)
         print(replica_set_status)
-        replication_status = self.mongo.replication_status(host)
-        print(replication_status)
         assert_replica_set_healthy(replica_set_status)
 
     def wait_until_cluster_healthy(self) -> None:
