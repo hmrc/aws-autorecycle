@@ -6,6 +6,7 @@ module "autorecycle_scale_asg_lambda" {
   environment_variables = {
     ENVIRONMENT = var.environment
   }
+  enable_error_alarm                      = false
   error_alarm_runbook                     = local.runbook_url
   function_name                           = "autorecycle-scale-asg"
   image_command                           = ["autorecycle_scale_asg.handler.lambda_handler"]

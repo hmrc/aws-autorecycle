@@ -6,6 +6,7 @@ module "autorecycle_lambda" {
   environment_variables = {
     environment = var.environment
   }
+  enable_error_alarm                      = false
   error_alarm_runbook                     = local.runbook_url
   function_name                           = "autorecycle"
   image_command                           = ["autorecycle.autorecycle_lambda.lambda_handler"]
