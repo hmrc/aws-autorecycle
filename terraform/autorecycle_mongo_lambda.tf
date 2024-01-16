@@ -9,6 +9,7 @@ module "autorecycle_mongo_lambda" {
     VAULT_URL   = "https://vault.${var.environment}.mdtp:8200"
     CA_CERT     = "src/mongo_recycler/mdtp.pem"
   }
+  enable_error_alarm                      = false
   error_alarm_runbook                     = local.runbook_url
   function_name                           = "aws-autorecycle-mongo-lambda"
   image_command                           = ["mongo_recycler.process.step.lambda_handler"]
