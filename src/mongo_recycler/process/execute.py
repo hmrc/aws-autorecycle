@@ -9,9 +9,12 @@ logger = logging.getLogger(__name__)
 
 
 def execute_action(decision: Decision, aws: AWS, mongo: Mongo, cluster_health: ReplicaSetHealth) -> None:
+    instances = aws.get_mongo_db_instances()
+    connection_string = ",".join(i["IpAddress"] for i in instances)
     if decision.action == DONE:
+        mongo.set_chaining(connection_string, True)
         return
-
+    mongo.set_chaining(connection_string, False)
     if decision.action == STEP_DOWN_AND_RECYCLE_PRIMARY:
         logger.info("STEPPING DOWN MONGO PRIMARY")
         mongo.step_down(decision.instance.ip_address)

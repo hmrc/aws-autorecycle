@@ -87,6 +87,19 @@ class Mongo:
         client = self._connect(connection_string)
         return client.admin.command("replSetGetStatus")
 
+    def set_chaining(self, connection_string: str, new_chaining_status: bool) -> Any:
+        client = self._connect(connection_string)
+        config = client.admin.command("replSetGetConfig")["config"]
+        current_chaining_status = config["settings"]["chainingAllowed"]
+        if current_chaining_status == new_chaining_status:
+            logger.info(f"Chaining status is already set to {new_chaining_status}")
+        else:
+            logger.info(f"Updating chaining status to {new_chaining_status}")
+            config["settings"]["chainingAllowed"] = new_chaining_status
+            config["version"] += 1
+            client.admin.command({"replSetReconfig": config})
+        return config
+
     def get_node_details(self, ip_address: str) -> Any:
         client = self._connect(ip_address)
         instance_status = client.admin.command("replSetGetStatus")
