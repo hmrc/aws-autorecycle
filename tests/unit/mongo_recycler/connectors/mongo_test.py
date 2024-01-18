@@ -1,3 +1,4 @@
+import json
 import ssl
 from unittest.mock import Mock, patch
 
@@ -174,3 +175,22 @@ def test_connect_retries(mock_mongo_client, mock_get_credentials_object, mock_ge
         mongo_instance._connect("")
     except TemporaryException:
         assert False, "_connect wasn't retried enough times"
+
+
+@patch("src.mongo_recycler.connectors.mongo.Mongo._connect")
+def test_if_settings_match_there_is_no_reconfig(mock_mongo_client):
+    mock_mongo_client().admin.command.return_value = {"config": {"version": 1, "settings": {"chainingAllowed": True}}}
+    mongo_instance = mongo.Mongo("test_cluster_mongo_a")
+    config = mongo_instance.set_chaining("foo_connection_string", True)
+    mock_mongo_client().admin.command.assert_called_once_with("replSetGetConfig")
+    assert config["settings"]["chainingAllowed"]
+
+
+@patch("src.mongo_recycler.connectors.mongo.Mongo._connect")
+def test_when_settings_change_there_is_a_reconfig(mock_mongo_client):
+    mock_mongo_client().admin.command.return_value = {"config": {"version": 1, "settings": {"chainingAllowed": True}}}
+    mongo_instance = mongo.Mongo("test_cluster_mongo_a")
+    config = mongo_instance.set_chaining("foo_connection_string", False)
+    mock_mongo_client().admin.command.assert_called_with({"replSetReconfig": config})
+    assert config["settings"]["chainingAllowed"] is False
+    assert config["version"] == 2
