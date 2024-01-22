@@ -14,6 +14,8 @@ def execute_action(decision: Decision, aws: AWS, mongo: Mongo, cluster_health: R
     if decision.action == DONE:
         mongo.set_chaining(connection_string, True)
         return
+    # We need to disable chaining to ensure that when we terminate a secondary, we can be confident
+    # that the other secondary is not syncing from it, as that would lead to replication timeouts
     mongo.set_chaining(connection_string, False)
     if decision.action == STEP_DOWN_AND_RECYCLE_PRIMARY:
         logger.info("STEPPING DOWN MONGO PRIMARY")
