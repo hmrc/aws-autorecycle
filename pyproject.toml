@@ -36,6 +36,7 @@ types-pytz = "^2023.3.0.0"
 types-requests = "<2.31.0.7"
 types-pyopenssl = "^23.2.0.2"
 aws-lambda-context = "^1.1.0"
+packaging = "^24.0"
 
 [tool.black]
 line-length = 88
