@@ -65,7 +65,7 @@ class Mongo:
             connection_string,
             serverSelectionTimeoutMS=5000,
             ssl=True,
-            ssl_cert_reqs=ssl.CERT_NONE,
+            tlsAllowInvalidCertificates=True,
             username=creds["username"],
             password=creds["password"],
             authMechanism="SCRAM-SHA-1",

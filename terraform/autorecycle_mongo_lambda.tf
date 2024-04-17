@@ -10,7 +10,7 @@ module "autorecycle_mongo_lambda" {
     CA_CERT     = "src/mongo_recycler/mdtp.pem"
   }
   enable_error_alarm                      = false
-  error_alarm_runbook                     = local.runbook_url
+  error_alarm_runbook                     = local.lambda_error_runbook_url
   function_name                           = "aws-autorecycle-mongo-lambda"
   image_command                           = ["mongo_recycler.process.step.lambda_handler"]
   image_uri                               = "419929493928.dkr.ecr.eu-west-2.amazonaws.com/aws-autorecycle:${var.image_tag}"

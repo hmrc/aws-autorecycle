@@ -83,7 +83,7 @@ def test_replica_set_status(mock_mongo_client, mock_get_credentials_object, mock
         password="pass",
         serverSelectionTimeoutMS=5000,
         ssl=True,
-        ssl_cert_reqs=ssl.CERT_NONE,
+        tlsAllowInvalidCertificates=True,
         username="user",
     )
 
@@ -128,7 +128,7 @@ def test_connect_with_auth(mock_mongo_client, mock_get_credentials_object, mock_
         "",
         serverSelectionTimeoutMS=5000,
         ssl=True,
-        ssl_cert_reqs=ssl.CERT_NONE,
+        tlsAllowInvalidCertificates=True,
         username="user",
         password="pass",
         authMechanism="SCRAM-SHA-1",
