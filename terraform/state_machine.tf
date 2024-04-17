@@ -621,7 +621,7 @@ resource "aws_sfn_state_machine" "auto_recycle" {
         "component.$": "$.component",
         "status": "fail",
         "message_content": {
-          "text": "Failed to recycle a component: ${local.runbook_url}",
+          "text": "Failed to recycle a component: ${local.autorecycle_failed_runbook_url}",
           "color": "danger",
           "fields": [
             {
