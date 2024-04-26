@@ -6,7 +6,6 @@ from collections import namedtuple
 from typing import Any
 
 import pymongo
-from aws_get_vault_object import get_credentials
 from pymongo.errors import AutoReconnect, ConnectionFailure, OperationFailure
 from tenacity import retry, stop_after_attempt, wait_exponential
 from tenacity.before import before_log
@@ -57,8 +56,6 @@ class Mongo:
 
     @retry(wait=wait_exponential(min=0.1, max=1), stop=stop_after_attempt(10), reraise=True)
     def _connect(self, connection_string: str) -> pymongo.MongoClient:
-        creds = self.get_credentials_from_vault()
-
         logger.info(f"Connecting to Mongo with connection string [{connection_string}]")
 
         connection_object: pymongo.MongoClient = pymongo.MongoClient(
@@ -66,22 +63,12 @@ class Mongo:
             serverSelectionTimeoutMS=5000,
             ssl=True,
             tlsAllowInvalidCertificates=True,
-            username=creds["username"],
-            password=creds["password"],
-            authMechanism="SCRAM-SHA-1",
+            authMechanism="MONGODB-AWS",
         )
 
         connection_object.admin.command("replSetGetStatus")
 
         return connection_object
-
-    def get_credentials_from_vault(self) -> Any:
-        VAULT_URL = os.getenv("VAULT_URL")
-        VAULT_ROLE_PATH = f"database/creds/autorecycle_{self.cluster_name}"
-        CREDS_FILE = "/tmp/.creds_file"  # nosec exclude from bandit security checks
-        CA_CERT = os.getenv("CA_CERT")
-        creds = get_credentials(VAULT_URL, VAULT_ROLE_PATH, CREDS_FILE, refresh=True, ca_cert=CA_CERT)["data"]
-        return creds
 
     def replica_set_status(self, connection_string: str) -> Any:
         client = self._connect(connection_string)
