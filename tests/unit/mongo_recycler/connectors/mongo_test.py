@@ -43,15 +43,9 @@ def test_node_details_unsuccessful():
         mongo.node_details(instance_status)
 
 
-@patch("aws_get_vault_object.__init__")
-@patch("src.mongo_recycler.connectors.mongo.get_credentials")
 @patch("pymongo.MongoClient")
-def test_get_node_details(mock_mongo_client, mock_get_credentials_object, mock_get_frozen_credentials):
+def test_get_node_details(mock_mongo_client):
     instance_status = {"myState": 2, "ok": 1.0, "set": "int-protected-1"}
-
-    mock_get_credentials_object.return_value = {"data": {"username": "user", "password": "pass"}}
-
-    mock_get_frozen_credentials.return_value = {"data": {"username": "user", "password": "pass"}}
 
     mock_mongo_client().admin.command.return_value = instance_status
 
@@ -62,15 +56,9 @@ def test_get_node_details(mock_mongo_client, mock_get_credentials_object, mock_g
     assert result == expected_result
 
 
-@patch("aws_get_vault_object.__init__")
-@patch("src.mongo_recycler.connectors.mongo.get_credentials")
 @patch("pymongo.MongoClient")
-def test_replica_set_status(mock_mongo_client, mock_get_credentials_object, mock_get_frozen_credentials):
+def test_replica_set_status(mock_mongo_client):
     instance_status = {"myState": 2, "ok": 1.0, "set": "int-protected-1"}
-
-    mock_get_credentials_object.return_value = {"data": {"username": "user", "password": "pass"}}
-
-    mock_get_frozen_credentials.return_value = {"data": {"username": "user", "password": "pass"}}
 
     mock_mongo_client().admin.command.return_value = instance_status
 
@@ -79,12 +67,10 @@ def test_replica_set_status(mock_mongo_client, mock_get_credentials_object, mock
 
     mock_mongo_client.assert_called_with(
         "1.1.1.1",
-        authMechanism="SCRAM-SHA-1",
-        password="pass",
+        authMechanism="MONGODB-AWS",
         serverSelectionTimeoutMS=5000,
         ssl=True,
         tlsAllowInvalidCertificates=True,
-        username="user",
     )
 
 
@@ -114,14 +100,9 @@ def test_step_down_throws_on_any_other_error_but_connection(mock_mongo_client):
         mongo_instance.step_down(ip_address)
 
 
-@patch("aws_get_vault_object.__init__")
-@patch("src.mongo_recycler.connectors.mongo.get_credentials")
 @patch("pymongo.MongoClient")
-def test_connect_with_auth(mock_mongo_client, mock_get_credentials_object, mock_get_frozen_credentials):
+def test_connect_with_auth(mock_mongo_client):
     mongo_instance = mongo.Mongo("test_cluster_mongo_a")
-    mock_get_credentials_object.return_value = {"data": {"username": "user", "password": "pass"}}
-
-    mock_get_frozen_credentials.return_value = {"data": {"username": "user", "password": "pass"}}
 
     mongo_instance._connect("")
     mock_mongo_client.assert_called_with(
@@ -129,37 +110,13 @@ def test_connect_with_auth(mock_mongo_client, mock_get_credentials_object, mock_
         serverSelectionTimeoutMS=5000,
         ssl=True,
         tlsAllowInvalidCertificates=True,
-        username="user",
-        password="pass",
-        authMechanism="SCRAM-SHA-1",
+        authMechanism="MONGODB-AWS",
     )
 
 
-@patch.dict("os.environ", {"VAULT_URL": "test-url"})
-@patch("aws_get_vault_object.__init__")
-@patch("src.mongo_recycler.connectors.mongo.get_credentials")
 @patch("pymongo.MongoClient")
-def test_connect_with_auth_again(mock_mongo_client, mock_get_credentials_object, mock_get_frozen_credentials):
+def test_connect_retries(mock_mongo_client):
     mongo_instance = mongo.Mongo("test_cluster_mongo_a")
-    mongo_instance._connect("")
-    assert mongo_instance.cluster_name == "test_cluster"
-    mock_get_credentials_object.assert_called_with(
-        "test-url",
-        "database/creds/autorecycle_test_cluster",
-        "/tmp/.creds_file",
-        refresh=True,
-        ca_cert=None,
-    )
-
-
-@patch("aws_get_vault_object.__init__")
-@patch("src.mongo_recycler.connectors.mongo.get_credentials")
-@patch("pymongo.MongoClient")
-def test_connect_retries(mock_mongo_client, mock_get_credentials_object, mock_get_frozen_credentials):
-    mongo_instance = mongo.Mongo("test_cluster_mongo_a")
-    mock_get_credentials_object.return_value = {"data": {"username": "user", "password": "pass"}}
-
-    mock_get_frozen_credentials.return_value = {"data": {"username": "user", "password": "pass"}}
 
     class TemporaryException(Exception):
         pass
