@@ -1,7 +1,6 @@
 from unittest.mock import Mock
 
 import pytest
-
 from src.mongo_recycler.utils.poll import poll
 
 

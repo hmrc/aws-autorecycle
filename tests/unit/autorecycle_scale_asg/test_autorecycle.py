@@ -6,7 +6,6 @@ from unittest import mock
 
 from dateutil.tz import tzutc
 from freezegun import freeze_time
-
 from src.autorecycle_scale_asg.autorecycle import (
     NextAsgAction,
     create_output_params,

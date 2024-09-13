@@ -1,5 +1,4 @@
 import pytest
-
 import src.mongo_recycler.process.pre_step_checks as recycler
 from tests.unit.mongo_recycler.test_utils import create_primary_1, create_secondary_1
 

@@ -2,9 +2,8 @@ from unittest.mock import Mock, patch
 
 import pytest
 from requests import ConnectionError
-from tenacity import RetryError, stop_after_attempt
-
 from src.mongo_recycler.connectors.sensu import _post_to_sensu, silence_sensu_alerts
+from tenacity import RetryError, stop_after_attempt
 
 
 @patch("requests.post")

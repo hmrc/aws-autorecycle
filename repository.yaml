@@ -2,4 +2,4 @@ repoVisibility: public_0C3F0CE3E6E6448FAD341E7BFA50FCD333E06A20CFF05FCACE61154DD
 leakDetectionExemptions:
  - ruleId: 'filename_private_key_5'
    filePaths:
-      - '/src/mongo_recycler/mdtp.pem'
+    - '/src/mongo_recycler/mdtp.pem'

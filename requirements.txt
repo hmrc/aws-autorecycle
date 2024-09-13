@@ -1,0 +1,12 @@
+boto3==1.16.38
+aws-lambda-logging==0.1.1
+pytz==2023.3
+pydantic==2.4.0
+aws-lambda-powertools==2.26.0
+ansicolors==1.1.8
+pymongo==4.6.3
+pymongo-auth-aws==1.1.0
+urllib3>=1.25.4,<1.27
+tenacity==8.2.3
+rfc3339==6.2
+hvac==0.11.2

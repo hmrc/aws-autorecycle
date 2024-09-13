@@ -1,7 +1,6 @@
 from typing import Any
 
 from colors import bold, faint, green, red, yellow
-
 from src.mongo_recycler.models.decision import (
     DONE,
     RECYCLE_SECONDARY,
