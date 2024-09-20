@@ -1,9 +1,8 @@
 from unittest.mock import MagicMock, Mock, call, patch
 
 import pytest
-from botocore.exceptions import ClientError
-
 import src.mongo_recycler.connectors.aws as aws
+from botocore.exceptions import ClientError
 from tests.unit.mongo_recycler.test_utils import create_primary_1
 
 reservations = {

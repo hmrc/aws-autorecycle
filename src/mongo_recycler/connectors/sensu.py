@@ -25,7 +25,7 @@ def _silence_sensu_alert_type(component: str, duration_seconds: int, check_type:
 @retry(
     wait=wait_fixed(60),
     stop=stop_after_attempt(8),
-    retry=retry_if_exception(ConnectionError),  # type: ignore
+    retry=retry_if_exception(ConnectionError),
     reraise=False,
 )
 def _post_to_sensu(payload: Any, final_check_name: str) -> Any:

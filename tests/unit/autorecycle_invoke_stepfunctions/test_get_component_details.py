@@ -4,7 +4,6 @@ import unittest
 
 from mock import patch
 from parameterized import parameterized
-
 from src.autorecycle_invoke_stepfunctions.get_component_details import assert_recyclable, get_component_name
 
 

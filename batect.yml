@@ -1,74 +1,78 @@
 forbid_telemetry: true
-project_name: aws-autocycle-lambda
+project_name: aws-autorecycle
 
 include:
   - type: git
-    repo: git@github.com:hmrc/infrastructure-pipeline-lambda-build
-    ref: main
+    repo: git@github.com:hmrc/infrastructure-pipeline-lambda-build.git
+    ref: python/3.9
 
 containers:
-  lambda: &lambda
+  release:
     build_directory: .
-    build_target: release
-  lambda-local:
-    <<: *lambda
-    ports:
-      - "8080:8080"
-    additional_hostnames:
-      - "lambda"
+    dockerfile: containers/release/Dockerfile
+  dev:
+    build_directory: .
+    dockerfile: containers/dev/Dockerfile
+    volumes:
+      - local: <{batect.project_directory}
+        container: /app
+    working_directory: /app
+    run_as_current_user:
+      enabled: true
+      home_directory: /home/container-user
   test:
     build_directory: .
-    build_target: dev
-    environment:
-      LAMBDA_TASK_ROOT: /devtools
-  linter:
-    build_directory: .
-    build_target: dev
-    entrypoint: /bin/sh -c
-    volumes:
-      - local: src
-        container: /devtools/src
-      - local: tests
-        container: /devtools/tests
-    working_directory: /devtools
+    dockerfile: containers/release/Dockerfile
+    command: "monitor_autorecycle.main.lambda_handler"
+    additional_hostnames:
+      - lambda
 
 tasks:
-  lambda-local:
-    dependencies:
-      - lambda-local
-    description: Start the integration dependencies to run integration tests via your editor
+  local:
     prerequisites:
-      - build-dev-image
+      - build
+    description: Start the integration dependencies to run integration tests via your editor
     run:
-      container: test
+      container: release
       entrypoint: /bin/sh
-  test-integration:
-    dependencies:
-      - lambda
+
+  test:unit:
+    description: Run all Python tests.
+    group: Test
+    prerequisites:
+      - build:test-base
+    run:
+      container: dev
+      entrypoint: pytest
+      command: -v tests/unit
+
+  test:integration:
     description: Run the integration tests
     prerequisites:
-      - build-dev-image
+      - build
+    dependencies:
+      - test
+    group: Test
     run:
-      command: run pytest -v tests/integration
-      container: test
-  test-unit:
-    description: Run the unit tests
+      container: dev
+      entrypoint: pytest
+      command: -vvv tests/integration
+
+  build:release:
+    description: Build the Lambda function release image
     prerequisites:
-      - build-dev-image
+      - build:release-base
+    group: Build
     run:
-      command: run pytest -v tests/unit
-      container: test
-  test-lint:
-    description: Runs the included linting tests
+      container: release
+      entrypoint: sh -c
+      command: "'python3 --version'"
+
+  shell:release:
+    description: Start a shell in the release container
+    group: Shell
     prerequisites:
-      - build-dev-image
+      - build:release-base
     run:
-      command: "'make lint'"
-      container: linter
-  fix-lint:
-    description: Fix linting issues with isort and black
-    prerequisites:
-      - build-dev-image
-    run:
-      command: "'make fix-lint'"
-      container: linter
+      container: release
+      entrypoint: bash

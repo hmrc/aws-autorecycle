@@ -1,7 +1,6 @@
 from unittest.mock import patch
 
 import pytest
-
 from src.mongo_recycler.models.decision import Decision, done, step_down_and_recycle_primary
 from src.mongo_recycler.models.instances import Instance
 from src.mongo_recycler.process.pre_step_checks import MongoReplicaSetMismatch

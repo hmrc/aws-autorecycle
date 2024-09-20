@@ -1,6 +1,5 @@
-from colors import bold, faint, green, red, yellow
-
 import src.mongo_recycler.process.decision as decision
+from colors import bold, faint, green, red, yellow
 from src.mongo_recycler.models.decision import done, recycle_secondary, step_down_and_recycle_primary
 from tests.unit.mongo_recycler.test_utils import (
     create_arbiter_1,

@@ -3,10 +3,9 @@ import ssl
 from unittest.mock import Mock, patch
 
 import pytest
+import src.mongo_recycler.connectors.mongo as mongo
 from pymongo.errors import AutoReconnect
 from tenacity.wait import wait_none
-
-import src.mongo_recycler.connectors.mongo as mongo
 
 
 def test_state_string_from_status():

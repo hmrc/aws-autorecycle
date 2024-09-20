@@ -4,7 +4,6 @@ import boto3
 from botocore.exceptions import ClientError
 from mock import patch
 from moto import mock_sqs
-
 from src.autorecycle.autorecycle_lambda import send_to_sqs
 
 

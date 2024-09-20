@@ -2,7 +2,6 @@ import logging
 import unittest
 
 from mock import patch
-
 from src.autorecycle_scale_asg.handler import lambda_handler
 from src.autorecycle_scale_asg.lambda_types import Event
 from tests.unit.autorecycle_scale_asg.fixtures import lambda_context
