@@ -87,21 +87,19 @@ The batect file contains three containers:
 
 | Name         | Description                                                                         |
 |--------------|-------------------------------------------------------------------------------------|
-| lambda       | The Lambda container using the `release` stage.                                     |
-| lambda-local | A copy of the `lambda` container with the port exposed for local integration tests. |
-| test         | The test container using the `dev` stage.                                           |
-| linter       | The test container using the `dev` stage with code directories mounted (r/w).       |
+| dev          | The tooling and development container used locally only.                            |
+| release      | A build of the container using only the runtime dependencies.                       |
+| lambda-local | A container based on release to run the lambda locally for integration testing or debugging.|
 
 And it contains the following tasks:
 
 | Name             | Description                                                                                                  |
 |------------------|--------------------------------------------------------------------------------------------------------------|
-| lambda-local     | Starts the `lambda-local` container for integration testing via your IDE.                                    |
-| test-integration | Starts the `lambda` container and then runs `poetry run tests/integration` in the `test` container.          |
-| test-unit        | Starts the `test` container and runs `poetry run tests/unit`.                                                |
-| test-lint        | Starts the `linter` container and runs `make lint` in the `/devtools` folder.                                |
-| fix-lint         | Starts the `linter` container and runs `make fix-lint` in the `/devtools` folder.                            |
+| local            | Starts the `lambda-local` container with a shell entrypoint for debugging. You can invoke this lambda locally as explained below |
+| test:integration | Starts the `lambda-local` container to host the lambda and then runs `pytest -vv tests/integration` in the `dev` container to test the lambda.|
+| test:unit        | Starts the `dev` container and runs `pytest -v tests/unit`.                                                  |
 
+check all available tasks included with the bundles `./batect --list-tasks`
 
 ## Other requirements
 
