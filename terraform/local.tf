@@ -8,3 +8,7 @@ locals {
 data "aws_caller_identity" "current" {}
 
 data "aws_region" "current" {}
+
+data "aws_sns_topic" "pagerduty_connector_noncritical" {
+  name = "pagerduty_infrastructure_noncritical-${var.environment}"
+}

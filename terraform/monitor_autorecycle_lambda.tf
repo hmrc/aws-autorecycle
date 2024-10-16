@@ -4,8 +4,9 @@ module "monitor_autorecycle_lambda" {
   account_engineering_boundary            = var.account_engineering_boundary
   environment                             = var.environment
   environment_variables                   = {}
-  enable_error_alarm                      = false
+  enable_error_alarm                      = true
   error_alarm_runbook                     = local.lambda_error_runbook_url
+  error_alarm_actions                     = [data.aws_sns_topic.pagerduty_connector_noncritical.arn]
   function_name                           = "monitor-autorecycle"
   image_command                           = ["monitor_autorecycle.main.lambda_handler"]
   image_uri                               = "419929493928.dkr.ecr.eu-west-2.amazonaws.com/aws-autorecycle:${var.image_tag}"

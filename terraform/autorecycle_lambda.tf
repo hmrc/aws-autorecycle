@@ -6,8 +6,9 @@ module "autorecycle_lambda" {
   environment_variables = {
     environment = var.environment
   }
-  enable_error_alarm                      = false
+  enable_error_alarm                      = true
   error_alarm_runbook                     = local.lambda_error_runbook_url
+  error_alarm_actions                     = [data.aws_sns_topic.pagerduty_connector_noncritical.arn]
   function_name                           = "autorecycle"
   image_command                           = ["autorecycle.autorecycle_lambda.lambda_handler"]
   image_uri                               = "419929493928.dkr.ecr.eu-west-2.amazonaws.com/aws-autorecycle:${var.image_tag}"
