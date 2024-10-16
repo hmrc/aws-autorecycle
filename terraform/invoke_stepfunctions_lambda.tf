@@ -8,7 +8,7 @@ module "invoke_stepfunctions_lambda" {
     "ACCOUNT_ID"    = data.aws_caller_identity.current.account_id
     "SLACK_CHANNEL" = var.slack_channel
   }
-  enable_error_alarm                      = false
+  enable_error_alarm                      = true
   error_alarm_runbook                     = local.lambda_error_runbook_url
   function_name                           = "autorecycle-invoke-stepfunctions"
   image_command                           = ["autorecycle_invoke_stepfunctions.handler.lambda_handler"]
