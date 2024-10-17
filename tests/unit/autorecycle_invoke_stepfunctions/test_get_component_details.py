@@ -26,6 +26,24 @@ class GetComponentDetails(unittest.TestCase):
 
         self.assertEqual("test-protected-mdtp", get_component_name(test_event_lt))
 
+    def test_get_component_name_from_CreateOrUpdate_tag(self):
+        """
+        With a component which is recyclable and triggered from CreateOrUpdateTag Event
+        """
+        with open("tests/test_data/autorecycle_invoke_stepfunctions/test-event-create-or-udpate-tags.json", "rb") as f:
+            test_event_lt = json.load(f)
+
+        self.assertEqual("test-protected-mdtp", get_component_name(test_event_lt))
+
+    def test_get_component_name_from_Delete_tag(self):
+        """
+        With a component which is recyclable and triggered from DeleteTag Event
+        """
+        with open("tests/test_data/autorecycle_invoke_stepfunctions/test-event-delete-tags.json", "rb") as f:
+            test_event_lt = json.load(f)
+
+        self.assertEqual("test-protected-mdtp", get_component_name(test_event_lt))
+
     def test_exception_is_raised_with_no_event_detail(self):
         """
         When there is no event detail we should raise an exception

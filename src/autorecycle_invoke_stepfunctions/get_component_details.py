@@ -26,19 +26,28 @@ def get_component_name(event: Any) -> Any:
     try:
         if event["detail"]:
             if "requestParameters" in event["detail"]:
-                component_name = event["detail"]["requestParameters"]["autoScalingGroupName"].split("-asg-")[0]
-                if component_name:
+                if ("CreateOrUpdateTags" or "DeleteTags" in event["detail"]["eventName"]) and (
+                    "tags" in event["detail"]["requestParameters"]
+                ):
+                    component_name = event["detail"]["requestParameters"]["tags"][0]["resourceId"].split("-asg-")[0]
                     logger.info("Component name was set to: {}".format(component_name))
-                    if "launchConfigurationName" in event["detail"]["requestParameters"]:
-                        logger.info("This component: {} is using a launchConfiguration".format(component_name))
-                    elif "launchTemplate" in event["detail"]["requestParameters"]:
-                        logger.info("This component: {} is using a launchTemplate".format(component_name))
-                    else:
-                        logger.info("The ASG was updated, but did not change the launchConfiguration or launchTemplate")
-                        raise SystemExit
                     return component_name
                 else:
-                    raise ComponentNameNotSet
+                    component_name = event["detail"]["requestParameters"]["autoScalingGroupName"].split("-asg-")[0]
+                    if component_name:
+                        logger.info("Component name was set to: {}".format(component_name))
+                        if "launchConfigurationName" in event["detail"]["requestParameters"]:
+                            logger.info("This component: {} is using a launchConfiguration".format(component_name))
+                        elif "launchTemplate" in event["detail"]["requestParameters"]:
+                            logger.info("This component: {} is using a launchTemplate".format(component_name))
+                        else:
+                            logger.info(
+                                "The ASG was updated, but did not change the launchConfiguration or launchTemplate"
+                            )
+                            raise SystemExit
+                        return component_name
+                    else:
+                        raise ComponentNameNotSet
             else:
                 raise RequestParametersNotFound
         else:
