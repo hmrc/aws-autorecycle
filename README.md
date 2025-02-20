@@ -6,80 +6,101 @@ This is a Lambda resource which starts a relevant step function when invoked by 
 
 ## Project Structure
 
-The structure of this project, along with steps to build the Lambda and run the tests locally was copied from the example project in the [infrastructure-pipeline-lambda-build](https://github.com/hmrc/infrastructure-pipeline-lambda-build/tree/main/example-project) repo. 
+The structure of this project, along with steps to build the Lambda and run the tests locally was copied from the example project in the [aws-lambda-example-project](https://github.com/hmrc/aws-lambda-example-project/tree/python/3.11) repo. 
 
 
 | Location       | Description                                                                     |
 |----------------|---------------------------------------------------------------------------------|
+| containers     | The Dockerfiles for development and release builds                              |
 | src/           | The code for the Lambda is contained in `src`.                                  |
 | terraform/     | Terraform configuration that is deployed by `webops-terraform`.                 |
 | tests/         | Integration and unit tests.                                                     |
-| Dockerfle      | The Docker commands required to build a test and release version of the Lambda. |
-| Makefile       | The commands required by the `buildLambda` function, plus others.               |
+| .gitignore     | Every repo should have one.                                                     |
+| .trivyignore   | Not all trivy issues need to be fixed, but having visibility helps              |
+| batect         | The script executable to run batect locally.                                    |
 | batect.yml     | The batect configuration for running the lambda and tests.                      |
-| pyproject.toml | The Python project configuration, including Poetry dependencies.                |
+| Jenkinsfile    | CI call to buildLambda function in the build pipeline                           |
+| requirements-dev.txt| The Python package dependencies used for development                       |
+| requirements.txt| The Python packages used to run the lambda                                     |
 
+### A note on Batect
 
+[Batect](https://batect.dev/) is used extensively to centralise and simplify container tasks.
 
+It is highly recommended you familiarise yourself with the included bundles reference in this batect.yml
+
+`./batect --list-tasks`
+
+For example, [repo: git@github.com:hmrc/infrastructure-pipeline-lambda-build.git](https://github.com/hmrc/infrastructure-pipeline-lambda-build/blob/main/batect-bundle.yml)
+
+You can quickly use these tasks to run standardised linting and scanning of your code, as defined below.
 
 ## Building the Lambda and running the tests
 
 ### Building the Image
 
-You will need to authenticate with the management account to be able to pull the base images, e.g:  
-`aws-vault exec webops-management-RoleInfrastructureEngineer -- aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin 419929493928.dkr.ecr.eu-west-2.amazonaws.com`
+`./batect build`
 
-The Lambda can be built with `make build TAG=autorecycle`.  
-This will build a Docker image which is tagged with `autorecycle`.
+### Linting and Security Scanning
 
-### Linting and Security Tests
+`./batect lint`
 
-The linting and security tests are provided by the `aws-lambda-dev-base` image.
+and
 
-They can be ran via Docker with `make test-lint`, which invokes the `make lint` command in `/devtools/Makefile`.
+`./batect scan`
 
-### Unit Tests
+### Tests
 
-Run the unit tests via your IDE or with Docker by `make test-unit`.
+Too run *all* unit and integration tests `./batect test`
 
-### Integration Tests
+Unit tests can be run with `./batect test:unit`
 
-To run the integration tests via your IDE you need to start the Lambda locally.  
-This can be performed by running `make lambda-local` which starts the Lambda on port `8080`.  
-You can then run the tests normally via your IDE.
+Integration tests can be run with `./batect test:integration`
 
-Alternatively, run `make test-integration` which will start the Lambda and run the integration tests for you in Docker.
+Add your tests to th### A note on Batect
+
+[Batect](https://batect.dev/) is used extensively to centralise and simplify container tasks.
+
+It is highly recommended you familiarise yourself with the included bundles reference in this batect.yml
+
+`./batect --list-tasks`
+
+For example, [repo: git@github.com:hmrc/infrastructure-pipeline-lambda-build.git](https://github.com/hmrc/infrastructure-pipeline-lambda-build/blob/main/batect-bundle.yml)
+
+You can quickly use these tasks to run standardised linting and scanning of your code, as defined below.
+
+## Building the Lambda and running the tests
+
+### Building the Image
+
+`./batect build`
+
+### Linting and Security Scanning
+
+`./batect lint`
+
+and
+
+`./batect scan`
+
+### Tests relevant folder to execute them in these containers.
 
 ## Building and Deploying the Lambda
 
-The `buildLambda` Jenkins function takes care of building, testing and pushing the Lambda to ECR.
+The [`buildLambda`](https://github.com/hmrc/infrastructure-pipeline-lambda-build/blob/main/vars/buildLambda.groovy)
+Jenkins function takes care of building, testing and pushing the Lambda to ECR.
 
-Currently, the deployment is handled by `webops-terraform` which uses the `terraform/` folder as a module.
+You can see this [example Lambda deployed here](https://github.com/hmrc/webops-terraform/blob/main/components/aws-lambda-example-project/main.tf).
 
-You can see this example Lambda deployed [here](https://github.com/hmrc/webops-terraform/blob/c0668f0359884256451422ed745e0040573c2bb8/components/autorecycle/lambda_functions.tf#L16).
+However, most production lambdas will be deployed [from tenant-compute-terraform, like this.](https://github.com/hmrc/tenant-compute-terraform/tree/main/components/ecs-deployer-lambda).
 
 ## Dockerfile Structure
 
-The Dockerfile contains both the `dev` (test) stage and a `release` stage.
-
-### Stage: dev
-
-In the `dev` stage, it bases the image from `aws-lambda-dev-base` which contains linting and security tooling.
-
-It copies in the `pyproject.toml` which contains the Poetry dependencies and exports a `requirements.txt` which is used by the
-release stage to install locked production dependencies that the Lambda was tested with at the time.
-
-Finally, the Python package `example` and the `tests` are copied in to the image.
-
-### Stage: release
-
-In the `release` stage, it bases the image from `aws-lambda-release-base` which contains a patched version of Python.
-
-It installs the production dependencies via pip from the `requirements.txt` generated in the `dev` stage.
-
-It then copies the Python package `example` and makes it executable.
-
-Finally, it tests whether it can import the `example` handler file and then sets the handler endpoint that Lambda will execute.
+There are 2 distinct Dockerfiles:
+- containers/dev/ is for local work and testing. It contains all of the dev requirements.
+    - modify this with the requirements-dev.txt and any other tools you need.
+- containers/release/ is used by the deployment process to host the lambda
+    - ensure your runtime dependencies are defined in pyproject.toml
 
 ## batect.yml
 
@@ -100,7 +121,6 @@ And it contains the following tasks:
 | test:unit        | Starts the `dev` container and runs `pytest -v tests/unit`.                                                  |
 
 check all available tasks included with the bundles `./batect --list-tasks`
-
 ## Other requirements
 
 Ensure you use the `asg-recycle` module - this will take care of creating any required extras e.g. SQS queue.
