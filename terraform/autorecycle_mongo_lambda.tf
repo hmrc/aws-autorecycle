@@ -58,6 +58,18 @@ data "aws_iam_policy_document" "autorecycle_mongo_lambda_policy" {
     effect = "Allow"
 
     actions = [
+      "dynamodb:PutItem",
+    ]
+
+    resources = [aws_dynamodb_table.mongo_recycle_in_progress.arn, ]
+  }
+
+
+
+  statement {
+    effect = "Allow"
+
+    actions = [
       "ec2:TerminateInstances",
     ]
 
