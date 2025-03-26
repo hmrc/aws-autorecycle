@@ -1,6 +1,8 @@
+import datetime
 import logging
 from typing import Any
 
+import boto3
 import src.mongo_recycler.models.decision
 import src.mongo_recycler.process.decision as decision
 import src.mongo_recycler.process.execute as execute
@@ -36,6 +38,22 @@ def step(component: str) -> Decision:
     return outcome
 
 
+def record_recycle_starting(component: str) -> None:
+    logger.info(f"Recording recycle start for: {component}")
+    dynamodb = boto3.resource("dynamodb", region_name="eu-west-2")
+    table = dynamodb.Table("mongo_recycle_in_progress")
+    try:
+        table.put_item(
+            Item={
+                "replicaset_name": component,
+                "ExpiryTime": int((datetime.datetime.utcnow() + datetime.timedelta(minutes=15)).timestamp()),
+            }
+        )
+    except Exception as e:
+        logger.info(f"DynamoDB put_item failed with {str(e)}")
+        raise
+
+
 def increment_counter(event: Any) -> Any:
     if "counter" not in event:
         event["counter"] = 0
@@ -53,6 +71,7 @@ def lambda_handler(event: Any, context: Any) -> Any:
 
     if is_first_run(event):
         silence_sensu_alerts(component, 900)
+        record_recycle_starting(component)
 
     step_result = step(component)
     event["decision"] = {"action": step_result.action, "instance": step_result.instance}

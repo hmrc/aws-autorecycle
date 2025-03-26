@@ -1,10 +1,18 @@
+import unittest
 from unittest.mock import patch
 
+import boto3
 import pytest
+from moto import mock_dynamodb
 from src.mongo_recycler.models.decision import Decision, done, step_down_and_recycle_primary
 from src.mongo_recycler.models.instances import Instance
 from src.mongo_recycler.process.pre_step_checks import MongoReplicaSetMismatch
-from src.mongo_recycler.process.step import increment_counter, is_first_run, lambda_handler, step
+from src.mongo_recycler.process.step import (
+    increment_counter,
+    is_first_run,
+    lambda_handler,
+    step,
+)
 
 
 class LaunchException(Exception):
@@ -120,7 +128,8 @@ def test_lambda_handler_raises_exception_without_silencing_alerts(mock_requests)
 @patch("src.mongo_recycler.connectors.sensu.silence_sensu_alerts")
 @patch("src.mongo_recycler.process.step.step")
 @patch("src.mongo_recycler.process.step.json_logger_config")
-def test_lambda_handler_runs(mock_logger, mock_run, mock_alerts, mock_requests_post):
+@patch("boto3.resource")
+def test_lambda_handler_runs(mock_boto3, mock_logger, mock_run, mock_alerts, mock_requests_post):
     event = {
         "component": "test-component",
         "message_content": {
@@ -167,7 +176,10 @@ def test_lambda_handler_runs_successfully(mock_logger, mock_run, mock_alerts, mo
 @patch("src.mongo_recycler.connectors.sensu.silence_sensu_alerts")
 @patch("src.mongo_recycler.process.step.step")
 @patch("src.mongo_recycler.process.step.json_logger_config")
-def test_lambda_handler_returns_no_instance_recycled(mock_logger, mock_run, mock_alerts, mock_requests_post):
+@patch("boto3.resource")
+def test_lambda_handler_returns_no_instance_recycled(
+    mock_boto3, mock_logger, mock_run, mock_alerts, mock_requests_post
+):
     event = {
         "component": "test-component",
         "message_content": {
