@@ -1,6 +1,9 @@
-from unittest.mock import patch
 import unittest
+from unittest.mock import patch
+
+import boto3
 import pytest
+from moto import mock_dynamodb
 from src.mongo_recycler.models.decision import Decision, done, step_down_and_recycle_primary
 from src.mongo_recycler.models.instances import Instance
 from src.mongo_recycler.process.pre_step_checks import MongoReplicaSetMismatch
@@ -9,10 +12,7 @@ from src.mongo_recycler.process.step import (
     is_first_run,
     lambda_handler,
     step,
-    record_recycle_starting,
 )
-import boto3
-from moto import mock_dynamodb
 
 
 class LaunchException(Exception):
