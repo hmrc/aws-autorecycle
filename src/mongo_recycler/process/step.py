@@ -1,5 +1,6 @@
 import datetime
 import logging
+import time
 from typing import Any
 
 import boto3
@@ -11,7 +12,6 @@ import src.mongo_recycler.process.pre_step_checks as pre_step_checks
 import src.mongo_recycler.process.replica_set_health as replica_set_health
 from src.mongo_recycler.connectors.aws import AWS
 from src.mongo_recycler.connectors.mongo import Mongo
-from src.mongo_recycler.connectors.sensu import silence_sensu_alerts
 from src.mongo_recycler.models.decision import Decision
 from src.mongo_recycler.utils.logger import json_logger_config
 
@@ -42,11 +42,12 @@ def record_recycle_starting(component: str) -> None:
     logger.info(f"Recording recycle start for: {component}")
     dynamodb = boto3.resource("dynamodb", region_name="eu-west-2")
     table = dynamodb.Table("mongo_recycle_in_progress")
+    timeInFifteenMins = int(time.time()) + 900
     try:
         table.put_item(
             Item={
                 "replicaset_name": component,
-                "ExpiryTime": int((datetime.datetime.utcnow() + datetime.timedelta(minutes=15)).timestamp()),
+                "ExpiryTime": timeInFifteenMins,
             }
         )
     except Exception as e:
@@ -70,7 +71,6 @@ def lambda_handler(event: Any, context: Any) -> Any:
     component = event["component"]
 
     if is_first_run(event):
-        silence_sensu_alerts(component, 900)
         record_recycle_starting(component)
 
     step_result = step(component)
