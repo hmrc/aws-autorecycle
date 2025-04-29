@@ -1,62 +1,61 @@
 #!/usr/bin/env python
 
 import logging
-from typing import Any, Tuple, Union
+from typing import Any, Optional
 
 logger = logging.getLogger(__name__)
 
 
-class NotRecyclable(Exception):
-    pass
+def get_component_name(event: dict[str, Any]) -> Optional[str]:
+    """
+    Extracts the component name from the event, if we determine the component should be recycled.
 
+    The component name is derived from the Auto Scaling Group (ASG) name.
+    If a component name was not found, None is returned.
 
-class EventDetailNotFound(Exception):
-    pass
+    This actually only returns the component name if the ASG tags were updated,
+    or the launchconfig/template was updated.
+    Any other ASG update event will not trigger a recycle.
+    """
 
+    component_name: str
 
-class ComponentNameNotSet(Exception):
-    pass
+    if "detail" not in event or not isinstance(event["detail"], dict):
+        logger.info("No detail in event")
+        return None
 
+    if "requestParameters" not in event["detail"] or not isinstance(event["detail"]["requestParameters"], dict):
+        logger.info("No requestParameters in event")
+        return None
 
-class RequestParametersNotFound(Exception):
-    pass
+    if event["detail"].get("eventName") in ["CreateOrUpdateTags", "DeleteTags"]:
+        if "tags" not in event["detail"]["requestParameters"]:
+            logger.info("No tags in event")
+            return None
 
+        component_name = event["detail"]["requestParameters"]["tags"][0]["resourceId"].split("-asg-")[0]
+        if not component_name:
+            logger.info("No component name in event")
+            return None
 
-def get_component_name(event: Any) -> Any:
-    try:
-        if event["detail"]:
-            if "requestParameters" in event["detail"]:
-                if event["detail"]["eventName"] == "CreateOrUpdateTags" or event["detail"]["eventName"] == "DeleteTags":
-                    if "tags" in event["detail"]["requestParameters"]:
-                        component_name = event["detail"]["requestParameters"]["tags"][0]["resourceId"].split("-asg-")[0]
-                        if component_name:
-                            logger.info("Component name was set to: {}".format(component_name))
-                            return component_name
-                        else:
-                            raise ComponentNameNotSet
-                else:
-                    component_name = event["detail"]["requestParameters"]["autoScalingGroupName"].split("-asg-")[0]
-                    if component_name:
-                        logger.info("Component name was set to: {}".format(component_name))
-                        if "launchConfigurationName" in event["detail"]["requestParameters"]:
-                            logger.info("This component: {} is using a launchConfiguration".format(component_name))
-                        elif "launchTemplate" in event["detail"]["requestParameters"]:
-                            logger.info("This component: {} is using a launchTemplate".format(component_name))
-                        else:
-                            logger.info(
-                                "The ASG was updated, but did not change the launchConfiguration or launchTemplate"
-                            )
-                            raise SystemExit
-                        return component_name
-                    else:
-                        raise ComponentNameNotSet
-            else:
-                raise RequestParametersNotFound
-        else:
-            raise EventDetailNotFound
-    except Exception as e:
-        logger.info("The event detail was not found when attempting to extract the component's name")
-        raise e
+        logger.info(f"Component name was set to: {component_name}")
+        return component_name
+
+    component_name = event["detail"]["requestParameters"]["autoScalingGroupName"].split("-asg-")[0]
+    if not component_name:
+        logger.info("No component name in event")
+        return None
+
+    logger.info(f"Component name was set to: {component_name}")
+
+    if (
+        "launchConfigurationName" not in event["detail"]["requestParameters"]
+        and "launchTemplate" not in event["detail"]["requestParameters"]
+    ):
+        logger.info("The launchConfiguration/launchTemplate is unchanged. Skipping recycling")
+        return None
+
+    return component_name
 
 
 def assert_recyclable(asg_tags: Any, component: Any, environment: Any) -> bool:

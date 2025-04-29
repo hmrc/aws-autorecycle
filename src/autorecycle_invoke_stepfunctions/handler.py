@@ -23,6 +23,7 @@ payload_to_asg_tag_map: dict[str, str] = dict(
 
 def lambda_handler(event: Any, context: Any) -> None:
     json_logger_config(event, context)
+    logger.info(event)
 
     component: Any = get_component_name(event)
     if component is None:

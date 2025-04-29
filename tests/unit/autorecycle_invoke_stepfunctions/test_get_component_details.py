@@ -44,27 +44,25 @@ class GetComponentDetails(unittest.TestCase):
 
         self.assertEqual("test-protected-mdtp", get_component_name(test_event_lt))
 
-    def test_exception_is_raised_with_no_event_detail(self):
+    def test_with_no_event_detail(self):
         """
-        When there is no event detail we should raise an exception
+        When there is no event detail we should return None
         """
         with open("tests/test_data/autorecycle_invoke_stepfunctions/test-event-launch-template.json", "rb") as f:
             test_event_lt = json.load(f)
 
         test_event_lt.pop("detail", None)
-        with self.assertRaises(KeyError):
-            get_component_name(test_event_lt)
+        assert get_component_name(test_event_lt) is None
 
     @patch.dict(os.environ, {"ACCOUNT_ID": "1234567890", "SLACK_CHANNEL": "event-test-recycle"})
-    def test_system_exit_is_raised_with_no_update(self):
+    def test_with_no_update(self):
         """
         When launchConfiguration or launchTemplate update not present UpdateAutoScalingGroup event
         """
         with open("tests/test_data/autorecycle_invoke_stepfunctions/test-event-no-update-present.json", "rb") as f:
             test_event_lt = json.load(f)
 
-        with self.assertRaises(SystemExit):
-            get_component_name(test_event_lt)
+        assert get_component_name(test_event_lt) is None
 
     def test_assert_recyclable_logs_message_when_component_is_recyclable(self):
         with self.assertLogs("src.autorecycle_invoke_stepfunctions.get_component_details", level="INFO") as logger:
