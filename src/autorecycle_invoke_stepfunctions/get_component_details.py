@@ -20,11 +20,11 @@ def get_component_name(event: dict[str, Any]) -> Optional[str]:
 
     component_name: str
 
-    if "detail" not in event:
+    if "detail" not in event or not isinstance(event["detail"], dict):
         logger.info("No detail in event")
         return None
 
-    if "requestParameters" not in event["detail"]:
+    if "requestParameters" not in event["detail"] or not isinstance(event["detail"]["requestParameters"], dict):
         logger.info("No requestParameters in event")
         return None
 
