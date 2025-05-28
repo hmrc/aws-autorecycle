@@ -1,0 +1,8 @@
+{
+   "detail": {
+      "requestParameters": {
+          "autoScalingGroupName": "test-protected-mdtp-asg-20191014094141784800000005",
+          "launchTemplate": "blah"
+      }
+   }
+}
