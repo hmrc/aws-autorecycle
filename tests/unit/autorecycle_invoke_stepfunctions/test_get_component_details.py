@@ -26,6 +26,17 @@ class GetComponentDetails(unittest.TestCase):
 
         self.assertEqual("test-protected-mdtp", get_component_name(test_event_lt))
 
+    def test_get_component_name_with_payload_from_instance_retirement_recycler(self):
+        """
+        With a payload submitted by the instance-retirement-recycler
+        """
+        with open(
+            "tests/test_data/autorecycle_invoke_stepfunctions/test-event-instance-retirement-recycler.json", "rb"
+        ) as f:
+            test_event_lt = json.load(f)
+
+        self.assertEqual("test-protected-mdtp", get_component_name(test_event_lt))
+
     def test_get_component_name_from_CreateOrUpdate_tag(self):
         """
         With a component which is recyclable and triggered from CreateOrUpdateTag Event
