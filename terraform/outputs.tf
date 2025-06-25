@@ -119,3 +119,16 @@ output "step_machine_iam_role" {
 output "step_machine_iam_role_name" {
   value = aws_iam_role.step_machine.name
 }
+
+#Consul lambdas
+output "check_consul_health_lambda_security_group" {
+  value = module.CheckClusterHealth_lambda.security_group_id
+}
+
+output "get_consul_nodes_lambda_security_group" {
+  value = module.GetConsulNodes_lambda.security_group_id
+}
+
+output "terminate_consul_nodes_lambda_security_group" {
+  value = module.TerminateConsulInstance_lambda.security_group_id
+}

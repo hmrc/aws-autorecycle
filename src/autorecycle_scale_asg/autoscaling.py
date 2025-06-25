@@ -8,12 +8,18 @@ import boto3
 
 if TYPE_CHECKING:
     from mypy_boto3_autoscaling import AutoScalingClient
-    from mypy_boto3_autoscaling.type_defs import ActivityTypeDef, AutoScalingGroupTypeDef, EmptyResponseMetadataTypeDef
+    from mypy_boto3_autoscaling.type_defs import (
+        ActivityTypeDef,
+        AutoScalingGroupTypeDef,
+        EmptyResponseMetadataTypeDef,
+    )
 
 from src.autorecycle_scale_asg.logger import logger
 
 
-def describe_asg(component_name_maybe_with_az_suffix: str) -> List[AutoScalingGroupTypeDef]:
+def describe_asg(
+    component_name_maybe_with_az_suffix: str,
+) -> List[AutoScalingGroupTypeDef]:
     asg_client: AutoScalingClient = boto3.client("autoscaling", "eu-west-2")
 
     auto_scaling_groups: List[AutoScalingGroupTypeDef] = []

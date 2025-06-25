@@ -7,7 +7,11 @@ from typing import TYPE_CHECKING, Dict, List, Literal, Optional, Union
 import pytz
 
 if TYPE_CHECKING:
-    from mypy_boto3_autoscaling.type_defs import ActivityTypeDef, AutoScalingGroupTypeDef, InstanceTypeDef
+    from mypy_boto3_autoscaling.type_defs import (
+        ActivityTypeDef,
+        AutoScalingGroupTypeDef,
+        InstanceTypeDef,
+    )
 
 from src.autorecycle_scale_asg.lambda_types import Event
 from src.autorecycle_scale_asg.logger import logger

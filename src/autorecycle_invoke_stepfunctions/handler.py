@@ -45,7 +45,11 @@ def lambda_handler(event: Any, context: Any) -> None:
 
 
 def construct_payload(
-    account_id: Any, slack_channel: Any, component: Any, autoscaling_group_name: Any, asg_tags: Any
+    account_id: Any,
+    slack_channel: Any,
+    component: Any,
+    autoscaling_group_name: Any,
+    asg_tags: Any,
 ) -> dict[Any, Any]:
     payload: dict[Any, Any] = dict()
     payload["account_id"] = account_id
