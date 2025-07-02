@@ -1,6 +1,6 @@
-import unittest
-from unittest.mock import patch, MagicMock
 import os
+import unittest
+from unittest.mock import MagicMock, patch
 
 from src.terminate_consul_instance.main import lambda_handler
 

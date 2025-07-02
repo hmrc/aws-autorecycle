@@ -1,8 +1,8 @@
-import unittest
-from unittest.mock import patch, MagicMock
 import json
 import os
+import unittest
 import urllib.error
+from unittest.mock import MagicMock, patch
 
 from src.get_consul_nodes.main import lambda_handler
 
