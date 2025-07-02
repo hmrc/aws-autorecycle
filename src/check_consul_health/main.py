@@ -7,10 +7,9 @@ from typing import Any
 def lambda_handler(event: Any, context: Any) -> Any:
     environment = os.environ.get("environment")
     if environment == "integration":
-        print("🔍 Lambda Event Payload:")
+        print("Lambda Event Payload:")
         print(event)
     consul_host = f"http://consul-{environment}.{environment}.mdtp:8500"
-    # consul_host = "https://consul-dp-infra-8594.integration.tax.service.gov.uk"
     expected_peers = event.get("expectedPeers", 3)  # Default to 3 if not provided
 
     try:
@@ -20,7 +19,7 @@ def lambda_handler(event: Any, context: Any) -> Any:
             if not leader:
                 raise Exception("No leader found")
 
-        # Check peer count
+        # Check number of nodes in the cluster is as expected.
         with urllib.request.urlopen(f"{consul_host}/v1/status/peers") as res:  # nosec
             peers = json.loads(res.read().decode())
             if len(peers) != expected_peers:

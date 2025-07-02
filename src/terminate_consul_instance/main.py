@@ -3,13 +3,12 @@ from typing import Any
 
 import boto3
 
-ec2 = boto3.client("ec2")
-
 
 def lambda_handler(event: Any, context: Any) -> Any:
+    ec2 = boto3.client("ec2")
     environment = os.environ.get("environment")
     if environment == "integration":
-        print("🔍 Lambda Event Payload:")
+        print("Lambda Event Payload:")
         print(event)
     instance_id = event.get("instanceId")
 
