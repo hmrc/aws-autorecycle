@@ -3,7 +3,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
   role_arn = aws_iam_role.consul_step_machine.arn
 
   definition = <<EOF
-{
+  {
     "StartAt": "StartNotification",
     "States": {
       "StartNotification": {
@@ -23,8 +23,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
           "username": "AutoRecycling"
         },
         "Next": "CheckClusterHealthInitial"
-      }
-    },
+      },
       "CheckClusterHealthInitial": {
         "Type": "Task",
         "Comment": "Check that consul is healthy before we start. 1 leader and 2 followers totalling 3 members",
@@ -32,7 +31,9 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
         "ResultPath": "$.initialHealth",
         "Retry": [
           {
-            "ErrorEquals": ["States.ALL"],
+            "ErrorEquals": [
+              "States.ALL"
+            ],
             "IntervalSeconds": 120,
             "MaxAttempts": 4,
             "BackoffRate": 2.0
@@ -67,7 +68,9 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                 "DocumentName": "AWS-RunShellScript",
                 "InstanceIds.$": "States.Array($.instanceId)",
                 "Parameters": {
-                  "commands": ["curl -X PUT http://localhost:8500/v1/agent/leave"]
+                  "commands": [
+                    "curl -X PUT http://localhost:8500/v1/agent/leave"
+                  ]
                 }
               },
               "ResultPath": "$.gracefulLeaveResult",
@@ -89,7 +92,9 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
               },
               "Retry": [
                 {
-                  "ErrorEquals": ["States.ALL"],
+                  "ErrorEquals": [
+                    "States.ALL"
+                  ],
                   "IntervalSeconds": 120,
                   "MaxAttempts": 4,
                   "BackoffRate": 2.0
@@ -120,7 +125,9 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
               "ResultPath": "$.postTerminationHealth",
               "Retry": [
                 {
-                  "ErrorEquals": ["States.ALL"],
+                  "ErrorEquals": [
+                    "States.ALL"
+                  ],
                   "IntervalSeconds": 180,
                   "MaxAttempts": 6,
                   "BackoffRate": 2.0
@@ -151,8 +158,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
         "End": true
       }
     }
-}
-
+  }
 
 EOF
 
