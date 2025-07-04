@@ -11,9 +11,6 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
         "Comment": "Send Slack notification that the Consul Control Plane has started",
         "Resource": "${var.slack_notifications_lambda}",
         "Parameters": {
-          "channels": [
-            "team-infra-alerts"
-          ],
           "text": "Auto-recycling was successfully initiated",
           "color": "good",
           "message_content": {
@@ -144,9 +141,6 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
         "Comment": "Send notification that the step function has completed",
         "Resource": "${var.slack_notifications_lambda}",
         "Parameters": {
-          "channels": [
-            "team-infra-alerts"
-          ],
           "text": "Auto-recycling the consul cluster has completed",
           "color": "good",
           "message_content": {
