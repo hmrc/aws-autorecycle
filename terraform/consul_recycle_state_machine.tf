@@ -18,7 +18,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
           "color": "good",
           "message_content": {
             "color": "good",
-            "text": "Auto-recycling of the Consul Control Plane was successfully initiated",
+            "text": "Auto-recycling of the Consul Control Plane was successfully initiated"
           },
           "username": "AutoRecycling"
         },
@@ -144,7 +144,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
           "color": "good",
           "message_content": {
             "color": "good",
-            "text": "Auto-recycling of the Consul Control Plane was successfully completed",
+            "text": "Auto-recycling of the Consul Control Plane was successfully completed"
           },
           "username": "AutoRecycling"
         },
