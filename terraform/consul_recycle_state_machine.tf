@@ -2,7 +2,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
   name     = "recycle_consul_agents"
   role_arn = aws_iam_role.consul_step_machine.arn
 
-  definition = <<EOF
+  definition = <<-EOF
 {
   "StartAt": "MainFlow",
   "States": {
@@ -15,7 +15,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
             "StartNotification": {
               "Type": "Task",
               "Comment": "Send Slack notification that auto-recycling of the Consul Control plane has started",
-              "Resource": "$${var.slack_notifications_lambda}",
+              "Resource": "${var.slack_notifications_lambda}",
               "Parameters": {
                 "text": "Auto-recycling was successfully initiated",
                 "color": "good",
@@ -30,7 +30,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
             "CheckClusterHealthInitial": {
               "Type": "Task",
               "Comment": "Check that consul is healthy before we start. 1 leader and 2 followers totalling 3 members",
-              "Resource": "$${module.CheckClusterHealth_lambda.lambda_alias_arn}",
+              "Resource": "${module.CheckClusterHealth_lambda.lambda_alias_arn}",
               "ResultPath": "$.initialHealth",
               "Retry": [
                 {
@@ -45,7 +45,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
             "GetConsulNodes": {
               "Type": "Task",
               "Comment": "Gets the IP and instance ID for each consul agent. Returns a sorted array with the leader last",
-              "Resource": "$${module.GetConsulNodes_lambda.lambda_alias_arn}",
+              "Resource": "${module.GetConsulNodes_lambda.lambda_alias_arn}",
               "ResultPath": "$.nodes",
               "Next": "ForEachInstance"
             },
@@ -79,14 +79,14 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                   },
                   "WaitBeforeHealthCheck": {
                     "Type": "Wait",
-                    "Comment": "Pause to allow node to leave cluster ",
+                    "Comment": "Pause to allow node to leave cluster",
                     "Seconds": 120,
                     "Next": "CheckClusterHealthPostLeave"
                   },
                   "CheckClusterHealthPostLeave": {
                     "Type": "Task",
                     "Comment": "Check the cluster is healthy and that there are now 2 nodes. 1 leader and one follower",
-                    "Resource": "$${module.CheckClusterHealth_lambda.lambda_alias_arn}",
+                    "Resource": "${module.CheckClusterHealth_lambda.lambda_alias_arn}",
                     "ResultPath": "$.healthCheck",
                     "Parameters": {
                       "expectedPeers": 2
@@ -104,7 +104,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                   "TerminateNode": {
                     "Type": "Task",
                     "Comment": "Terminate the node that has just left the consul control plane.",
-                    "Resource": "$${module.TerminateConsulInstance_lambda.lambda_alias_arn}",
+                    "Resource": "${module.TerminateConsulInstance_lambda.lambda_alias_arn}",
                     "Parameters": {
                       "instanceId.$": "$.instanceId"
                     },
@@ -120,7 +120,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                   "CheckClusterHealthFinal": {
                     "Type": "Task",
                     "Comment": "Confirm that cluster is stable with 3 nodes. 1 leader and 2 followers",
-                    "Resource": "$${module.CheckClusterHealth_lambda.lambda_alias_arn}",
+                    "Resource": "${module.CheckClusterHealth_lambda.lambda_alias_arn}",
                     "ResultPath": "$.postTerminationHealth",
                     "Retry": [
                       {
@@ -139,7 +139,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
             "EndNotification": {
               "Type": "Task",
               "Comment": "Send notification that the step function has completed",
-              "Resource": "$${var.slack_notifications_lambda}",
+              "Resource": "${var.slack_notifications_lambda}",
               "Parameters": {
                 "text": "Auto-recycling the consul cluster has completed",
                 "color": "good",
@@ -152,38 +152,35 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
               "End": true
             }
           }
-        ],
-        "Catch": [
-          {
-            "ErrorEquals": ["States.ALL"],
-            "Next": "FailureNotification"
-          }
-        ],
-        "Next": "SuccessEnd"
-      },
-      "FailureNotification": {
-        "Type": "Task",
-        "Comment": "Send Slack notification that the step function failed",
-        "Resource": "$${var.slack_notifications_lambda}",
-        "Parameters": {
-          "text": "Auto-recycling of the Consul Control Plane failed",
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "Next": "FailureNotification"
+        }
+      ],
+      "End": true
+    },
+    "FailureNotification": {
+      "Type": "Task",
+      "Comment": "Send Slack notification that the step function failed",
+      "Resource": "${var.slack_notifications_lambda}",
+      "Parameters": {
+        "text": "Auto-recycling of the Consul Control Plane failed",
+        "color": "danger",
+        "message_content": {
           "color": "danger",
-          "message_content": {
-            "color": "danger",
-            "text": "Auto-recycling of the Consul Control Plane encountered an error and was aborted"
-          },
-          "username": "AutoRecycling"
+          "text": "Auto-recycling of the Consul Control Plane encountered an error and was aborted"
         },
-        "End": true
+        "username": "AutoRecycling"
       },
-      "SuccessEnd": {
-        "Type": "Succeed"
-      }
+      "End": true
     }
   }
+}
 EOF
 }
-
 
 
 resource "aws_iam_role" "consul_step_machine" {
