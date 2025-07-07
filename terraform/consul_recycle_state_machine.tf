@@ -187,8 +187,8 @@ EOF
 
 
 resource "aws_iam_role" "consul_step_machine" {
-  name_prefix           = "autorecycle-consul-step-"
-  permissions_boundary  = var.account_engineering_boundary
+  name_prefix          = "autorecycle-consul-step-"
+  permissions_boundary = var.account_engineering_boundary
 
   assume_role_policy = <<EOF
 {
