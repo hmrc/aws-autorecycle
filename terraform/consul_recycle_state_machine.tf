@@ -161,28 +161,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
         ],
         "Next": "SuccessEnd"
       },
-      "FailureNotification": {
-        "Type": "Task",
-        "Comment": "Send Slack notification that the step function failed",
-        "Resource": "$${var.slack_notifications_lambda}",
-        "Parameters": {
-          "text": "Auto-recycling of the Consul Control Plane failed",
-          "color": "danger",
-          "message_content": {
-            "color": "danger",
-            "text": "Auto-recycling of the Consul Control Plane encountered an error and was aborted"
-          },
-          "username": "AutoRecycling"
-        },
-        "End": true
-      },
-      "SuccessEnd": {
-        "Type": "Succeed"
-      }
-    }
-  }
-EOF
-}
+      "FailureNotification
 
 
 
