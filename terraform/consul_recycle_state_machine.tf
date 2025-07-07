@@ -184,7 +184,8 @@ EOF
 
 
 resource "aws_iam_role" "consul_step_machine" {
-  name_prefix          = "autorecycle-consul-step-"
+  name_prefix = "autorecycle-consul-step-"
+
   permissions_boundary = var.account_engineering_boundary
 
   assume_role_policy = <<EOF
@@ -194,7 +195,7 @@ resource "aws_iam_role" "consul_step_machine" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Service": "states.$${data.aws_region.current.name}.amazonaws.com"
+        "Service": "states.${data.aws_region.current.name}.amazonaws.com"
       },
       "Action": "sts:AssumeRole"
     }
