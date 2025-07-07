@@ -8,7 +8,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
     "States": {
       "StartNotification": {
         "Type": "Task",
-        "Comment": "Send Slack notification that the Consul Control Plane has started",
+        "Comment": "Send Slack notification that auto-recycling of the Consul Control plane has started",
         "Resource": "${var.slack_notifications_lambda}",
         "Parameters": {
           "text": "Auto-recycling was successfully initiated",
