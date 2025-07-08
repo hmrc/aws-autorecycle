@@ -18,6 +18,9 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
               "Resource": "${var.slack_notifications_lambda}",
               "Parameters": {
                 "text": "Auto-recycling was successfully initiated",
+                "channels": [
+                  "${var.slack_channel}"
+                ],
                 "color": "good",
                 "message_content": {
                   "color": "good",
@@ -142,6 +145,9 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
               "Resource": "${var.slack_notifications_lambda}",
               "Parameters": {
                 "text": "Auto-recycling the consul cluster has completed",
+                "channels": [
+                  "${var.slack_channel}"
+                ],
                 "color": "good",
                 "message_content": {
                   "color": "good",
@@ -168,6 +174,9 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
       "Resource": "${var.slack_notifications_lambda}",
       "Parameters": {
         "text": "Auto-recycling of the Consul Control Plane failed",
+        "channels": [
+          "${var.slack_error_channel}"
+        ],
         "color": "danger",
         "message_content": {
           "color": "danger",
