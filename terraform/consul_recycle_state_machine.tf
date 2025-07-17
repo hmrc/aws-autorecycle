@@ -24,7 +24,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                 "color": "good",
                 "message_content": {
                   "color": "good",
-                  "text.$": "Auto-recycling of the Consul Control Plane $.cluster was successfully initiated"
+                  "text": "Auto-recycling of the Consul Control Plane was successfully initiated"
                 },
                 "username": "AutoRecycling"
               },
@@ -162,7 +162,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                 "color": "good",
                 "message_content": {
                   "color": "good",
-                  "text.$": "Auto-recycling of the Consul Control Plane $.cluster was successfully completed"
+                  "text": "Auto-recycling of the Consul Control Plane was successfully completed"
                 },
                 "username": "AutoRecycling"
               },
@@ -191,7 +191,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
         "color": "danger",
         "message_content": {
           "color": "danger",
-          "text.$": "Auto-recycling of the Consul Control Plane $.cluster encountered an error and was aborted"
+          "text": "Auto-recycling of the Consul Control Plane encountered an error and was aborted"
         },
         "username": "AutoRecycling"
       },
