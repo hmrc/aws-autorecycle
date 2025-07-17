@@ -6,7 +6,7 @@ from typing import Any
 
 # Normally we connect to consul-{environment}.{environment}.mdtp but we also support
 # connection to other clusters (e.g. engineer environments)
-def get_consul_host(event: Any):
+def get_consul_host(event: Any) -> str:
     environment = os.environ.get("environment")
     if environment == "integration":
         print("Lambda Event Payload:")
