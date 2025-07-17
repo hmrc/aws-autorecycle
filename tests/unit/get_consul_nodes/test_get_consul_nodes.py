@@ -4,7 +4,7 @@ import unittest
 import urllib.error
 from unittest.mock import MagicMock, patch
 
-from src.get_consul_nodes.main import lambda_handler
+from src.get_consul_nodes.main import lambda_handler, get_consul_host
 
 
 class TestLambdaHandler(unittest.TestCase):
@@ -75,6 +75,14 @@ class TestLambdaHandler(unittest.TestCase):
 
         self.assertIn("Get Consul Nodes Failed", str(context.exception))
         self.assertIn("Internal Server Error", str(context.exception))
+
+    @patch.dict(os.environ, {"environment": "integration"})
+    def test_get_consul_host_defaults_to_environment(self):
+        self.assertEqual(get_consul_host({}), "http://consul-integration.integration.mdtp:8500")
+
+    @patch.dict(os.environ, {"environment": "integration"})
+    def test_get_consul_host_includes_cluster(self):
+        self.assertEqual(get_consul_host({"cluster": "dev-1"}), "http://consul-dev-1.integration.mdtp:8500")
 
 
 if __name__ == "__main__":
