@@ -4,7 +4,7 @@ import unittest
 import urllib.error
 from unittest.mock import MagicMock, patch
 
-from src.get_consul_nodes.main import lambda_handler, get_consul_host
+from src.get_consul_nodes.main import get_consul_host, lambda_handler
 
 
 class TestLambdaHandler(unittest.TestCase):
