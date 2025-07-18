@@ -1,6 +1,6 @@
 #############################     GetConsulNodes_lambda          #############################
 module "GetConsulNodes_lambda" {
-  count  = var.environment == "management" ? 0 : 1
+  count = var.environment != "management" ? 1 : 0
   source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
 
   account_engineering_boundary = var.account_engineering_boundary
@@ -52,7 +52,7 @@ resource "aws_iam_role_policy" "aws_autorecycle_GetConsulNodes_lambda" {
 #############################     CheckClusterHealth          #############################
 
 module "CheckClusterHealth_lambda" {
-  count  = var.environment == "management" ? 0 : 1
+  count = var.environment != "management" ? 1 : 0
   source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
 
   account_engineering_boundary = var.account_engineering_boundary
@@ -105,7 +105,7 @@ resource "aws_iam_role_policy" "aws_autorecycle_CheckClusterHealth_lambda" {
 #############################     TerminateConsulInstance          #############################
 
 module "TerminateConsulInstance_lambda" {
-  count  = var.environment == "management" ? 0 : 1
+  count = var.environment != "management" ? 1 : 0
   source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
 
   account_engineering_boundary = var.account_engineering_boundary
