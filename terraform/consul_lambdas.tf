@@ -1,5 +1,6 @@
 #############################     GetConsulNodes_lambda          #############################
 module "GetConsulNodes_lambda" {
+  count  = var.environment == "management" ? 0 : 1
   source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
 
   account_engineering_boundary = var.account_engineering_boundary
@@ -23,7 +24,7 @@ module "GetConsulNodes_lambda" {
 }
 
 resource "aws_lambda_function_event_invoke_config" "GetConsulNodes_lambda" {
-  function_name                = module.GetConsulNodes_lambda.lambda_name
+  function_name                = module.GetConsulNodes_lambda[0].lambda_name
   maximum_event_age_in_seconds = 300
   maximum_retry_attempts       = 0
 }
@@ -42,7 +43,7 @@ data "aws_iam_policy_document" "aws_autorecycle_GetConsulNodes_lambda_policy" {
 }
 
 resource "aws_iam_role_policy" "aws_autorecycle_GetConsulNodes_lambda" {
-  role   = module.GetConsulNodes_lambda.iam_role_id
+  role   = module.GetConsulNodes_lambda[0].iam_role_id
   policy = data.aws_iam_policy_document.aws_autorecycle_GetConsulNodes_lambda_policy.json
 }
 
@@ -51,6 +52,7 @@ resource "aws_iam_role_policy" "aws_autorecycle_GetConsulNodes_lambda" {
 #############################     CheckClusterHealth          #############################
 
 module "CheckClusterHealth_lambda" {
+  count  = var.environment == "management" ? 0 : 1
   source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
 
   account_engineering_boundary = var.account_engineering_boundary
@@ -73,7 +75,7 @@ module "CheckClusterHealth_lambda" {
 }
 
 resource "aws_lambda_function_event_invoke_config" "CheckClusterHealth_lambda" {
-  function_name                = module.CheckClusterHealth_lambda.lambda_name
+  function_name                = module.CheckClusterHealth_lambda[0].lambda_name
   maximum_event_age_in_seconds = 300
   maximum_retry_attempts       = 0
 }
@@ -92,7 +94,7 @@ data "aws_iam_policy_document" "aws_autorecycle_CheckClusterHealth_lambda_policy
 }
 
 resource "aws_iam_role_policy" "aws_autorecycle_CheckClusterHealth_lambda" {
-  role   = module.CheckClusterHealth_lambda.iam_role_id
+  role   = module.CheckClusterHealth_lambda[0].iam_role_id
   policy = data.aws_iam_policy_document.aws_autorecycle_CheckClusterHealth_lambda_policy.json
 }
 
@@ -103,6 +105,7 @@ resource "aws_iam_role_policy" "aws_autorecycle_CheckClusterHealth_lambda" {
 #############################     TerminateConsulInstance          #############################
 
 module "TerminateConsulInstance_lambda" {
+  count  = var.environment == "management" ? 0 : 1
   source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
 
   account_engineering_boundary = var.account_engineering_boundary
@@ -126,7 +129,7 @@ module "TerminateConsulInstance_lambda" {
 }
 
 resource "aws_lambda_function_event_invoke_config" "TerminateConsulInstance_lambda" {
-  function_name                = module.TerminateConsulInstance_lambda.lambda_name
+  function_name                = module.TerminateConsulInstance_lambda[0].lambda_name
   maximum_event_age_in_seconds = 300
   maximum_retry_attempts       = 0
 }
@@ -158,6 +161,6 @@ data "aws_iam_policy_document" "aws_autorecycle_TerminateConsulInstance_lambda_p
 }
 
 resource "aws_iam_role_policy" "aws_autorecycle_TerminateConsulInstance_lambda" {
-  role   = module.TerminateConsulInstance_lambda.iam_role_id
+  role   = module.TerminateConsulInstance_lambda[0].iam_role_id
   policy = data.aws_iam_policy_document.aws_autorecycle_TerminateConsulInstance_lambda_policy.json
 }

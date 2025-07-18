@@ -33,7 +33,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
             "CheckClusterHealthInitial": {
               "Type": "Task",
               "Comment": "Check that consul is healthy before we start. 1 leader and 2 followers totalling 3 members",
-              "Resource": "${module.CheckClusterHealth_lambda.lambda_alias_arn}",
+              "Resource": "${module.CheckClusterHealth_lambda[0].lambda_alias_arn}",
               "Parameters": {
                 "cluster.$": "$.cluster"
               },
@@ -51,7 +51,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
             "GetConsulNodes": {
               "Type": "Task",
               "Comment": "Gets the IP and instance ID for each consul agent. Returns a sorted array with the leader last",
-              "Resource": "${module.GetConsulNodes_lambda.lambda_alias_arn}",
+              "Resource": "${module.GetConsulNodes_lambda[0].lambda_alias_arn}",
               "Parameters": {
                 "cluster.$": "$.cluster"
               },
@@ -96,7 +96,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                   "CheckClusterHealthPostLeave": {
                     "Type": "Task",
                     "Comment": "Check the cluster is healthy and that there are now 2 nodes. 1 leader and one follower",
-                    "Resource": "${module.CheckClusterHealth_lambda.lambda_alias_arn}",
+                    "Resource": "${module.CheckClusterHealth_lambda[0].lambda_alias_arn}",
                     "ResultPath": "$.healthCheck",
                     "Parameters": {
                       "cluster.$": "$.cluster",
@@ -115,7 +115,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                   "TerminateNode": {
                     "Type": "Task",
                     "Comment": "Terminate the node that has just left the consul control plane.",
-                    "Resource": "${module.TerminateConsulInstance_lambda.lambda_alias_arn}",
+                    "Resource": "${module.TerminateConsulInstance_lambda[0].lambda_alias_arn}",
                     "Parameters": {
                       "instanceId.$": "$.instanceId"
                     },
@@ -131,7 +131,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                   "CheckClusterHealthFinal": {
                     "Type": "Task",
                     "Comment": "Confirm that cluster is stable with 3 nodes. 1 leader and 2 followers",
-                    "Resource": "${module.CheckClusterHealth_lambda.lambda_alias_arn}",
+                    "Resource": "${module.CheckClusterHealth_lambda[0].lambda_alias_arn}",
                     "Parameters": {
                       "cluster.$": "$.cluster"
                     },
@@ -233,9 +233,9 @@ data "aws_iam_policy_document" "allow_consul_step_function_to_invoke_lambdas" {
     effect = "Allow"
     resources = compact([
       var.slack_notifications_lambda,
-      module.GetConsulNodes_lambda.lambda_alias_arn,
-      module.CheckClusterHealth_lambda.lambda_alias_arn,
-      module.TerminateConsulInstance_lambda.lambda_alias_arn
+      module.GetConsulNodes_lambda[0].lambda_alias_arn,
+      module.CheckClusterHealth_lambda[0].lambda_alias_arn,
+      module.TerminateConsulInstance_lambda[0].lambda_alias_arn
     ])
   }
   statement {

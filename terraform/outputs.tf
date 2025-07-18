@@ -123,15 +123,15 @@ output "step_machine_iam_role_name" {
 
 #Consul lambdas
 output "check_consul_health_lambda_security_group" {
-  value = module.CheckClusterHealth_lambda.security_group_id
+  value = module.CheckClusterHealth_lambda[0].security_group_id
 }
 
 output "get_consul_nodes_lambda_security_group" {
-  value = module.GetConsulNodes_lambda.security_group_id
+  value = module.GetConsulNodes_lambda[0].security_group_id
 }
 
 output "terminate_consul_nodes_lambda_security_group" {
-  value = module.TerminateConsulInstance_lambda.security_group_id
+  value = module.TerminateConsulInstance_lambda[0].security_group_id
 }
 output "autorecycle_consul_sfn_id" {
   value = aws_sfn_state_machine.recycle_consul_agents.id
