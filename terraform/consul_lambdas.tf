@@ -1,6 +1,6 @@
 #############################     GetConsulNodes_lambda          #############################
 module "GetConsulNodes_lambda" {
-  count  = var.environment != "management" ? 1 : 0
+  count  = local.enable_consul_lambdas ? 1 : 0
   source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
 
   account_engineering_boundary = var.account_engineering_boundary
@@ -24,35 +24,32 @@ module "GetConsulNodes_lambda" {
 }
 
 resource "aws_lambda_function_event_invoke_config" "GetConsulNodes_lambda" {
-  function_name                = module.GetConsulNodes_lambda[0].lambda_name
+  count = local.enable_consul_lambdas ? 1 : 0
+
+  function_name                = local.get_consul_nodes_lambda_name
   maximum_event_age_in_seconds = 300
   maximum_retry_attempts       = 0
 }
 
 data "aws_iam_policy_document" "aws_autorecycle_GetConsulNodes_lambda_policy" {
   statement {
-    effect = "Allow"
-
-    actions = [
-      "sqs:SendMessage",
-    ]
-
+    effect    = "Allow"
+    actions   = ["sqs:SendMessage"]
     resources = ["arn:aws:sqs:eu-west-2:${data.aws_caller_identity.current.account_id}:recycle-*"]
   }
-
 }
 
 resource "aws_iam_role_policy" "aws_autorecycle_GetConsulNodes_lambda" {
-  role   = module.GetConsulNodes_lambda[0].iam_role_id
+  count = local.enable_consul_lambdas ? 1 : 0
+
+  role   = local.get_consul_nodes_iam_role_id
   policy = data.aws_iam_policy_document.aws_autorecycle_GetConsulNodes_lambda_policy.json
 }
 
 
-
 #############################     CheckClusterHealth          #############################
-
 module "CheckClusterHealth_lambda" {
-  count  = var.environment != "management" ? 1 : 0
+  count  = local.enable_consul_lambdas ? 1 : 0
   source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
 
   account_engineering_boundary = var.account_engineering_boundary
@@ -75,37 +72,32 @@ module "CheckClusterHealth_lambda" {
 }
 
 resource "aws_lambda_function_event_invoke_config" "CheckClusterHealth_lambda" {
-  function_name                = module.CheckClusterHealth_lambda[0].lambda_name
+  count = local.enable_consul_lambdas ? 1 : 0
+
+  function_name                = local.check_cluster_health_lambda_name
   maximum_event_age_in_seconds = 300
   maximum_retry_attempts       = 0
 }
 
 data "aws_iam_policy_document" "aws_autorecycle_CheckClusterHealth_lambda_policy" {
   statement {
-    effect = "Allow"
-
-    actions = [
-      "sqs:SendMessage",
-    ]
-
+    effect    = "Allow"
+    actions   = ["sqs:SendMessage"]
     resources = ["arn:aws:sqs:eu-west-2:${data.aws_caller_identity.current.account_id}:recycle-*"]
   }
-
 }
 
 resource "aws_iam_role_policy" "aws_autorecycle_CheckClusterHealth_lambda" {
-  role   = module.CheckClusterHealth_lambda[0].iam_role_id
+  count = local.enable_consul_lambdas ? 1 : 0
+
+  role   = local.check_cluster_health_iam_role_id
   policy = data.aws_iam_policy_document.aws_autorecycle_CheckClusterHealth_lambda_policy.json
 }
 
 
-
-
-
 #############################     TerminateConsulInstance          #############################
-
 module "TerminateConsulInstance_lambda" {
-  count  = var.environment != "management" ? 1 : 0
+  count  = local.enable_consul_lambdas ? 1 : 0
   source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
 
   account_engineering_boundary = var.account_engineering_boundary
@@ -129,28 +121,23 @@ module "TerminateConsulInstance_lambda" {
 }
 
 resource "aws_lambda_function_event_invoke_config" "TerminateConsulInstance_lambda" {
-  function_name                = module.TerminateConsulInstance_lambda[0].lambda_name
+  count = local.enable_consul_lambdas ? 1 : 0
+
+  function_name                = local.terminate_consul_lambda_name
   maximum_event_age_in_seconds = 300
   maximum_retry_attempts       = 0
 }
 
 data "aws_iam_policy_document" "aws_autorecycle_TerminateConsulInstance_lambda_policy" {
   statement {
-    effect = "Allow"
-
-    actions = [
-      "sqs:SendMessage",
-    ]
-
+    effect    = "Allow"
+    actions   = ["sqs:SendMessage"]
     resources = ["arn:aws:sqs:eu-west-2:${data.aws_caller_identity.current.account_id}:recycle-*"]
   }
 
   statement {
-    effect = "Allow"
-
-    actions = [
-      "ec2:TerminateInstances"
-    ]
+    effect    = "Allow"
+    actions   = ["ec2:TerminateInstances"]
     resources = ["*"]
     condition {
       test     = "StringLike"
@@ -161,6 +148,8 @@ data "aws_iam_policy_document" "aws_autorecycle_TerminateConsulInstance_lambda_p
 }
 
 resource "aws_iam_role_policy" "aws_autorecycle_TerminateConsulInstance_lambda" {
-  role   = module.TerminateConsulInstance_lambda[0].iam_role_id
+  count = local.enable_consul_lambdas ? 1 : 0
+
+  role   = local.terminate_consul_iam_role_id
   policy = data.aws_iam_policy_document.aws_autorecycle_TerminateConsulInstance_lambda_policy.json
 }
