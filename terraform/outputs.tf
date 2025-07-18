@@ -137,6 +137,6 @@ output "terminate_consul_nodes_lambda_security_group" {
 }
 
 output "autorecycle_consul_sfn_id" {
-  value       = local.enable_consul_lambdas ? aws_sfn_state_machine.recycle_consul_agents.id : null
+  value       = local.enable_consul_lambdas ? aws_sfn_state_machine.recycle_consul_agents[0].id : null
   description = "State machine ID for autorecycling Consul agents"
 }
