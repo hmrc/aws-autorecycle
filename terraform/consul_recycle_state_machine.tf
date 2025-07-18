@@ -24,7 +24,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                 "color": "good",
                 "message_content": {
                   "color": "good",
-                  "text": "Auto-recycling of the Consul Control Plane was successfully initiated"
+                  "text.$": "States.Format('Auto-recycling of the Consul Control Plane {} was successfully initiated', $$.Execution.Input.cluster)"
                 },
                 "username": "AutoRecycling"
               },
@@ -35,7 +35,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
               "Comment": "Check that consul is healthy before we start. 1 leader and 2 followers totalling 3 members",
               "Resource": "${module.CheckClusterHealth_lambda.lambda_alias_arn}",
               "Parameters": {
-                "cluster.$": "$.cluster"
+                "cluster.$": $$.Execution.Input.cluster"
               },
               "ResultPath": "$.initialHealth",
               "Retry": [
@@ -53,7 +53,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
               "Comment": "Gets the IP and instance ID for each consul agent. Returns a sorted array with the leader last",
               "Resource": "${module.GetConsulNodes_lambda.lambda_alias_arn}",
               "Parameters": {
-                "cluster.$": "$.cluster"
+                "cluster.$": "$$.Execution.Input.cluster"
               },
               "ResultPath": "$.nodes",
               "Next": "ForEachInstance"
@@ -64,7 +64,6 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
               "ItemsPath": "$.nodes.instanceList",
               "MaxConcurrency": 1,
               "Parameters": {
-                "cluster.$": "$.cluster",
                 "ip.$": "$$.Map.Item.Value.ip",
                 "instanceId.$": "$$.Map.Item.Value.instanceId"
               },
@@ -99,7 +98,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                     "Resource": "${module.CheckClusterHealth_lambda.lambda_alias_arn}",
                     "ResultPath": "$.healthCheck",
                     "Parameters": {
-                      "cluster.$": "$.cluster",
+                      "cluster.$": "$$.Execution.Input.cluster",
                       "expectedPeers": 2
                     },
                     "Retry": [
@@ -133,7 +132,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                     "Comment": "Confirm that cluster is stable with 3 nodes. 1 leader and 2 followers",
                     "Resource": "${module.CheckClusterHealth_lambda.lambda_alias_arn}",
                     "Parameters": {
-                      "cluster.$": "$.cluster"
+                      "cluster.$": "$$.Execution.Input.cluster"
                     },
                     "ResultPath": "$.postTerminationHealth",
                     "Retry": [
@@ -162,7 +161,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                 "color": "good",
                 "message_content": {
                   "color": "good",
-                  "text": "Auto-recycling of the Consul Control Plane was successfully completed"
+                  "text.$": "States.Format('Auto-recycling of the Consul Control Plane {} was successfully completed', $$.Execution.Input.cluster)"
                 },
                 "username": "AutoRecycling"
               },
@@ -184,7 +183,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
       "Comment": "Send Slack notification that the step function failed",
       "Resource": "${var.slack_notifications_lambda}",
       "Parameters": {
-        "text": "Auto-recycling of the Consul Control Plane failed",
+        "text.$": "States.Format('Auto-recycling of the Consul Control Plane {} failed', $$.Execution.Input.cluster)"
         "channels": [
           "${var.slack_error_channel}"
         ],
