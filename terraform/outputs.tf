@@ -121,18 +121,22 @@ output "step_machine_iam_role_name" {
   value = aws_iam_role.step_machine.name
 }
 
-#Consul lambdas
 output "check_consul_health_lambda_security_group" {
-  value = module.CheckClusterHealth_lambda.security_group_id
+  value       = local.enable_consul_lambdas ? module.CheckClusterHealth_lambda[0].security_group_id : null
+  description = "Security group ID for the CheckClusterHealth Lambda"
 }
 
 output "get_consul_nodes_lambda_security_group" {
-  value = module.GetConsulNodes_lambda.security_group_id
+  value       = local.enable_consul_lambdas ? module.GetConsulNodes_lambda[0].security_group_id : null
+  description = "Security group ID for the GetConsulNodes Lambda"
 }
 
 output "terminate_consul_nodes_lambda_security_group" {
-  value = module.TerminateConsulInstance_lambda.security_group_id
+  value       = local.enable_consul_lambdas ? module.TerminateConsulInstance_lambda[0].security_group_id : null
+  description = "Security group ID for the TerminateConsulInstance Lambda"
 }
+
 output "autorecycle_consul_sfn_id" {
-  value = aws_sfn_state_machine.recycle_consul_agents.id
+  value       = local.enable_consul_lambdas ? aws_sfn_state_machine.recycle_consul_agents[0].id : null
+  description = "State machine ID for autorecycling Consul agents"
 }
