@@ -35,7 +35,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
               "Comment": "Check that consul is healthy before we start. 1 leader and 2 followers totalling 3 members",
               "Resource": "${module.CheckClusterHealth_lambda.lambda_alias_arn}",
               "Parameters": {
-                "cluster.$": $$.Execution.Input.cluster"
+                "cluster.$": "$$.Execution.Input.cluster"
               },
               "ResultPath": "$.initialHealth",
               "Retry": [
@@ -183,7 +183,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
       "Comment": "Send Slack notification that the step function failed",
       "Resource": "${var.slack_notifications_lambda}",
       "Parameters": {
-        "text.$": "States.Format('Auto-recycling of the Consul Control Plane {} failed', $$.Execution.Input.cluster)"
+        "text.$": "States.Format('Auto-recycling of the Consul Control Plane {} failed', $$.Execution.Input.cluster)",
         "channels": [
           "${var.slack_error_channel}"
         ],
