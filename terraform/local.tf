@@ -12,13 +12,3 @@ data "aws_region" "current" {}
 data "aws_sns_topic" "pagerduty_connector_noncritical" {
   name = "pagerduty_infrastructure_noncritical-${var.environment}"
 }
-
-data "terraform_remote_state" "networks" {
-  backend = "s3"
-
-  config = {
-    bucket = "tfstate-${var.environment}-${md5(data.aws_caller_identity.current.account_id)}"
-    region = data.aws_region.current.name
-    key    = "networks.tfstate"
-  }
-}

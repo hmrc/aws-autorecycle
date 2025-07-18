@@ -79,3 +79,8 @@ variable "start_instance_refresh_lambda_name" {
   type        = string
   default     = ""
 }
+
+variable "vpc_endpoint_sg" {
+  description = "VPC Endpoint Security Group"
+  type        = list(string)
+}
