@@ -4,7 +4,7 @@ project_name: aws-autorecycle
 include:
   - type: git
     repo: git@github.com:hmrc/infrastructure-pipeline-lambda-build.git
-    ref: python/3.9
+    ref: python/3.11
 
 containers:
   release:
