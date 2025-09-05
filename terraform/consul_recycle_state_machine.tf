@@ -75,7 +75,12 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                       "DocumentName": "AWS-RunShellScript",
                       "InstanceIds.$": "States.Array($.instanceId)",
                       "Parameters": {
-                        "commands": ["curl -X PUT http://localhost:8500/v1/agent/leave"]
+                        "commands": [
+                          "echo 'Checking Consul leader status...'",
+                          "curl -s http://localhost:8500/v1/status/leader || echo 'Consul not responding, not running or leaderless'",
+                          "echo 'Attempting graceful leave...'",
+                          "curl -X PUT http://localhost:8500/v1/agent/leave || echo 'Leave command failed'"
+                        ]
                       }
                     },
                     "ResultPath": "$.gracefulLeaveResult",
