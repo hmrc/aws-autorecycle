@@ -32,7 +32,7 @@ def lambda_handler(event: Any, context: Any) -> Any:
         with urllib.request.urlopen(f"{consul_host}/v1/status/peers") as res:  # nosec
             peers = json.loads(res.read().decode())
             if len(peers) != expected_peers:
-                raise Exception(f" {len(peers)} peers found, expected {expected_peers}")
+                raise Exception(f"{len(peers)} peers found, expected {expected_peers}")
 
         return {
             "statusCode": 200,

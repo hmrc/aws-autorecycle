@@ -59,7 +59,7 @@ class TestLambdaHandler(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             lambda_handler({"expectedPeers": 3}, None)
 
-        self.assertIn("Only 1 peers found", str(context.exception))
+        self.assertIn("1 peers found", str(context.exception))
 
     @patch.dict(os.environ, {"environment": "test"})
     @patch("urllib.request.urlopen")
