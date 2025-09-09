@@ -179,7 +179,12 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
         },
         "username": "AutoRecycling"
       },
-      "End": true
+      "Next": "FailState"
+    },
+    "FailState": {
+      "Type": "Fail",
+      "Error": "AutoRecyclingFailed",
+      "Cause": "Error encountered during Consul Recycle"
     }
   }
 }
