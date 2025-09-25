@@ -77,9 +77,9 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                       "Parameters": {
                         "commands": [
                           "echo 'Checking Consul leader status...'",
-                          "curl -s http://localhost:8500/v1/status/leader || echo 'Consul not responding, not running or leaderless'",
+                          "curl -s https://localhost:8501/v1/status/leader || echo 'Consul not responding, not running or leaderless'",
                           "echo 'Attempting graceful leave...'",
-                          "curl -X PUT http://localhost:8500/v1/agent/leave || echo 'Leave command failed'"
+                          "curl -X PUT https://localhost:8501/v1/agent/leave || echo 'Leave command failed'"
                         ]
                       }
                     },

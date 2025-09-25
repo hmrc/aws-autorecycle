@@ -63,7 +63,7 @@ class TestLambdaHandler(unittest.TestCase):
     def test_leader_request_fails(self, mock_urlopen, mock_boto_client):
         # Simulate a 500 error from /v1/status/leader
         mock_urlopen.side_effect = urllib.error.HTTPError(
-            url="http://consul-test.test.mdtp:8500/v1/status/leader",
+            url="https://consul-test.test.mdtp:8501/v1/status/leader",
             code=500,
             msg="Internal Server Error",
             hdrs=None,
@@ -78,11 +78,11 @@ class TestLambdaHandler(unittest.TestCase):
 
     @patch.dict(os.environ, {"environment": "integration"})
     def test_get_consul_host_defaults_to_environment(self):
-        self.assertEqual(get_consul_host({}), "http://consul-integration.integration.mdtp:8500")
+        self.assertEqual(get_consul_host({}), "https://consul-integration.integration.mdtp:8501")
 
     @patch.dict(os.environ, {"environment": "integration"})
     def test_get_consul_host_includes_cluster(self):
-        self.assertEqual(get_consul_host({"cluster": "dev-1"}), "http://consul-dev-1.integration.mdtp:8500")
+        self.assertEqual(get_consul_host({"cluster": "dev-1"}), "https://consul-dev-1.integration.mdtp:8501")
 
 
 if __name__ == "__main__":

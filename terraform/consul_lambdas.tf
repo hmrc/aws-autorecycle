@@ -7,6 +7,7 @@ module "GetConsulNodes_lambda" {
   environment                  = var.environment
   environment_variables = {
     environment = var.environment
+    CONSUL_TLS_CERT_PARAMETER_ARN = var.consul_ca_cert_arn
   }
   enable_error_alarm                      = true
   error_alarm_runbook                     = local.lambda_error_runbook_url
@@ -37,6 +38,26 @@ data "aws_iam_policy_document" "aws_autorecycle_GetConsulNodes_lambda_policy" {
     actions   = ["sqs:SendMessage"]
     resources = ["arn:aws:sqs:eu-west-2:${data.aws_caller_identity.current.account_id}:recycle-*"]
   }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ssm:GetParameter"]
+    resources = [var.consul_ca_cert_arn]
+  }
+
+  # Allow decryption of parameters encrypted with default SSM key
+  statement {
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt"
+    ]
+    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:alias/aws/ssm"]
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["ssm.eu-west-2.amazonaws.com"]
+    }
+  }
 }
 
 resource "aws_iam_role_policy" "aws_autorecycle_GetConsulNodes_lambda" {
@@ -56,6 +77,7 @@ module "CheckClusterHealth_lambda" {
   environment                  = var.environment
   environment_variables = {
     environment = var.environment
+    CONSUL_TLS_CERT_PARAMETER_ARN = var.consul_ca_cert_arn
   }
   enable_error_alarm                      = true
   error_alarm_runbook                     = local.lambda_error_runbook_url
@@ -84,6 +106,26 @@ data "aws_iam_policy_document" "aws_autorecycle_CheckClusterHealth_lambda_policy
     effect    = "Allow"
     actions   = ["sqs:SendMessage"]
     resources = ["arn:aws:sqs:eu-west-2:${data.aws_caller_identity.current.account_id}:recycle-*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ssm:GetParameter"]
+    resources = [var.consul_ca_cert_arn]
+  }
+
+  # Allow decryption of parameters encrypted with default SSM key
+  statement {
+    effect = "Allow"
+    actions = [
+      "kms:Decrypt"
+    ]
+    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:alias/aws/ssm"]
+    condition {
+      test     = "StringEquals"
+      variable = "kms:ViaService"
+      values   = ["ssm.eu-west-2.amazonaws.com"]
+    }
   }
 }
 

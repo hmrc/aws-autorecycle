@@ -84,3 +84,9 @@ variable "vpc_endpoint_sg" {
   description = "VPC Endpoint Security Group"
   type        = list(string)
 }
+
+variable "consul_ca_cert_arn" {
+  description = "The ARN of the SSM parameter containing the Consul TLS CA certificate"
+  type        = string
+  default     = ""
+}
