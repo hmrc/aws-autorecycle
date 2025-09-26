@@ -6,7 +6,7 @@ module "GetConsulNodes_lambda" {
   account_engineering_boundary = var.account_engineering_boundary
   environment                  = var.environment
   environment_variables = {
-    environment = var.environment
+    environment                   = var.environment
     CONSUL_TLS_CERT_PARAMETER_ARN = var.consul_ca_cert_arn
   }
   enable_error_alarm                      = true
@@ -76,7 +76,7 @@ module "CheckClusterHealth_lambda" {
   account_engineering_boundary = var.account_engineering_boundary
   environment                  = var.environment
   environment_variables = {
-    environment = var.environment
+    environment                   = var.environment
     CONSUL_TLS_CERT_PARAMETER_ARN = var.consul_ca_cert_arn
   }
   enable_error_alarm                      = true

@@ -10,6 +10,7 @@ import boto3
 
 logger = logging.getLogger(__name__)
 
+
 class CaCertificate:
     """
     Manage CA certificate retrieval and caching.
@@ -29,27 +30,27 @@ class CaCertificate:
     def _retrieve_cert(self) -> None:
         """Retrieve certificate from Parameter Store and write to temp file."""
         if not self.cert_parameter_arn:
-            logger.info('No TLS certificate ARN configured')
+            logger.info("No TLS certificate ARN configured")
             return
 
         try:
-            logger.info(f'Retrieving CA certificate from parameter: {self.cert_parameter_arn}')
-            ssm = boto3.client('ssm', region_name='eu-west-2')
+            logger.info(f"Retrieving CA certificate from parameter: {self.cert_parameter_arn}")
+            ssm = boto3.client("ssm", region_name="eu-west-2")
             response = ssm.get_parameter(Name=self.cert_parameter_arn, WithDecryption=True)
-            cert_content = response['Parameter']['Value']
+            cert_content = response["Parameter"]["Value"]
 
-            with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.pem') as f:
+            with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".pem") as f:
                 f.write(cert_content)
                 self._cert_path = f.name
 
-            logger.info(f'Successfully retrieved CA certificate and wrote to {self._cert_path}')
+            logger.info(f"Successfully retrieved CA certificate and wrote to {self._cert_path}")
 
         except Exception:
-            logger.exception('Failed to retrieve CA certificate')
+            logger.exception("Failed to retrieve CA certificate")
             raise
 
 
-ca_certificate = CaCertificate(os.environ.get('CONSUL_TLS_CERT_PARAMETER_ARN'))
+ca_certificate = CaCertificate(os.environ.get("CONSUL_TLS_CERT_PARAMETER_ARN"))
 
 
 # Normally we connect to consul-{environment}.{environment}.mdtp but we also support
