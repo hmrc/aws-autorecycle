@@ -91,6 +91,7 @@ module "CheckClusterHealth_lambda" {
   timeout                                 = 300
   vpc_id                                  = var.autorecycle_mongo_lambda_vpc_id
   vpc_subnet_ids                          = var.autorecycle_mongo_lambda_subnet_ids
+  security_group_ids                      = var.vpc_endpoint_sg
 }
 
 resource "aws_lambda_function_event_invoke_config" "CheckClusterHealth_lambda" {
