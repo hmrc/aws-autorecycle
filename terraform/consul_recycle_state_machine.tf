@@ -79,7 +79,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                           "echo 'Checking Consul leader status...'",
                           "curl --cacert /etc/consul/tls/consul-agent-ca.pem -s https://localhost:8501/v1/status/leader || echo 'Consul not responding, not running or leaderless'",
                           "echo 'Attempting graceful leave...'",
-                          "curl --cacert /etc/consul/tls/consul-agent-ca.pem -X PUT https://localhost:8501/v1/agent/leave || echo 'Leave command failed'"
+                          "curl --cacert /etc/consul/tls/consul-agent-ca.pem -X PUT https://localhost:8501/v1/agent/leave --header \"X-Consul-Token: $(aws ssm get-parameter --name '${var.consul_acl_token_parameter_arn}' --with-decryption --output text --query 'Parameter.Value')\" || echo 'Leave command failed'"
                         ]
                       }
                     },
