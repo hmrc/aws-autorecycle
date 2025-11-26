@@ -90,3 +90,9 @@ variable "consul_ca_cert_arn" {
   type        = string
   default     = ""
 }
+
+variable "consul_acl_token_parameter_arn" {
+  description = "The ARN of the SSM parameter containing the Consul ACL token used in requests to Consul"
+  type        = string
+  default     = ""
+}
