@@ -26,7 +26,7 @@ def describe_asg(
     for page in asg_client.get_paginator("describe_auto_scaling_groups").paginate(PaginationConfig={"PageSize": 100}):
         auto_scaling_groups += page["AutoScalingGroups"]
 
-    (component_name, number_of_subs_made) = re.subn("_[abc]$", "", component_name_maybe_with_az_suffix)
+    component_name, number_of_subs_made = re.subn("_[abc]$", "", component_name_maybe_with_az_suffix)
     extension_re = ""
     if number_of_subs_made == 1:
         extension_re = "(?:_[abc])"
