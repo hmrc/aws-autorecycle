@@ -205,7 +205,6 @@ resource "aws_sfn_state_machine" "auto_recycle" {
           "${var.slack_channel}"
         ],
         "message_content": {
-          "color": "good",
           "text": "Auto-recycling was successfully initiated",
           "fields": [
             {
@@ -300,7 +299,6 @@ resource "aws_sfn_state_machine" "auto_recycle" {
           "${var.slack_channel}"
         ],
         "message_content": {
-          "color": "good",
           "text": "Instance refresh was successfully initiated",
           "fields": [
             {
