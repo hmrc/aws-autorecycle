@@ -43,7 +43,8 @@ services:
       context: .
       dockerfile: containers/python-tools/Dockerfile
     volumes:
-      - ./:/work    
+      - ./:/work 
+    working_dir: /work
     networks:
           - default
 
