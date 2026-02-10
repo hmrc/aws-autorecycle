@@ -44,7 +44,6 @@ services:
       dockerfile: containers/python-tools/Dockerfile
     volumes:
       - ./:/work 
-    working_dir: /work
     networks:
           - default
 
