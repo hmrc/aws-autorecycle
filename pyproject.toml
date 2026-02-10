@@ -1,0 +1,69 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "aws-autorecycle"
+version = "0.0.0"
+readme = "README.md"
+requires-python = ">=3.11"
+
+dependencies = [
+  "aws-lambda-powertools",      # your original dependency
+  "boto3==1.16.38",             # used by src/.../connectors/aws.py and others
+  "pymongo==4.6.3",             # used by mongo connector
+  "pymongo-auth-aws==1.1.0",    # for AWS IAM auth with Mongo
+  "aws-lambda-logging==0.1.1",  # used by monitor_autorecycle/main.py
+  "ansicolors==1.1.8",          # provides 'colors' module for colored output
+  "pytz==2023.3",               # used in tests/requirements.txt; keep aligned
+  "pydantic>=2.4.0,<3",         # you’re calling model_dump (Pydantic v2)
+  "urllib3>=1.25.4,<1.27",      # pinned per tests/requirements.txt
+  "tenacity==8.2.3",            # retry/backoff used across code
+  "rfc3339==6.2",               # date formatting utility (tests list it)
+  "hvac==0.11.2",               # HashiCorp Vault client (tests list it)
+  "urllib3>=1.25.4,<1.27",
+  "freezegun==1.5.5",
+  "moto==2.2.9",
+  "parameterized==0.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+  "ruff==0.6.2",
+  "mypy==1.11.2",
+  "bandit[toml]==1.7.10",
+  "black==24.8.0",
+  "isort==5.13.2",
+]
+test = [
+  "pytest==8.3.3",
+  # Add pytest plugins here if you use them:
+  # "pytest-mock",
+  # "pytest-asyncio",
+  # "moto",
+]
+
+[tool.black]
+line-length = 120
+
+[tool.isort]
+profile = "black"
+line_length = 120
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+
+[tool.mypy]
+check_untyped_defs = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+no_implicit_optional = true
+show_error_codes = true
+warn_return_any = true
+warn_unused_ignores = true
+exclude = "tests/"
+
+[tool.bandit.assert_used]
+skips = ["*"]

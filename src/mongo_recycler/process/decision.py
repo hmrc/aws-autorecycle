@@ -11,7 +11,6 @@ from src.mongo_recycler.models.decision import (
     step_down_and_recycle_primary,
 )
 from src.mongo_recycler.models.instances import Instance, find_instances
-from src.mongo_recycler.process.replica_set_health import ReplicaSetHealth
 
 
 def choose_color(instance: Instance, target_ami: str) -> Any:

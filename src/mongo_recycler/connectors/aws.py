@@ -4,7 +4,6 @@ from typing import Any, Generator
 
 import boto3
 from botocore.exceptions import ClientError
-from src.mongo_recycler.models.instances import Instance
 from src.mongo_recycler.utils.poll import poll
 
 

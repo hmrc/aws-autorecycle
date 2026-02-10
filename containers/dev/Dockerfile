@@ -1,5 +1,5 @@
 # hadolint ignore=DL3006
-FROM aws-autorecycle-test-base
+FROM public.ecr.aws/lambda/python:3.11
 
 SHELL ["/bin/bash", "-ueox", "pipefail", "-c"]
 

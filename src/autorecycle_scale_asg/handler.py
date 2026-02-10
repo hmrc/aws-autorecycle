@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import os
-from typing import Any, Dict
+from typing import List, Dict, Any
 
 from src.autorecycle_scale_asg import autorecycle, autoscaling
 from src.autorecycle_scale_asg.lambda_types import Event
@@ -14,7 +14,7 @@ def lambda_handler(lambda_event: Event, context: Any) -> Dict:
 
 
 def handle_event(lambda_event: Event) -> Event:
-    event = Event.model_validate(lambda_event)
+    event = lambda_event
     logger.debug("Initiating with the following event")
     logger.debug(event)
 
@@ -28,10 +28,10 @@ def handle_event(lambda_event: Event) -> Event:
         return Event(
             component=event.component,
             channels=event.monitoring_slack_channel,
-            message_content={
-                "color": "danger",
-                "text": f"Autorecycling of {event.component} appears to be taking too long :scream: please investigate.",
-            },
+            message_content = Event.MessageContent(
+                color="danger",
+                text=f"Autorecycling of {event.component} appears to be taking too long :scream: please investigate.",
+            ),
             monitoring_slack_channel=event.monitoring_slack_channel,
             pager_duty_description=f"Autorecycling of {event.component} appears to be taking too long. Please investigate.",
             pager_duty_event_type="trigger",
@@ -45,7 +45,7 @@ def handle_event(lambda_event: Event) -> Event:
 def scale_asg(event: Event) -> Event:
     output = autorecycle.create_output_params(event)
 
-    message_content_fields = [
+    message_content_fields: List[Dict[str, Any]] = [
         {
             "title": "Component",
             "value": event.component,

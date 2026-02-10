@@ -1,14 +1,11 @@
 import logging
-import os
 import re
-import ssl
 from collections import namedtuple
 from typing import Any
 
 import pymongo
-from pymongo.errors import AutoReconnect, ConnectionFailure, OperationFailure
+from pymongo.errors import AutoReconnect
 from tenacity import retry, stop_after_attempt, wait_exponential
-from tenacity.before import before_log
 
 logger = logging.getLogger(__name__)
 

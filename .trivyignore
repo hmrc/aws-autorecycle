@@ -1,9 +1,0 @@
-AVD-DS-0001
-AVD-DS-0002
-AVD-DS-0026
-
-# https://avd.aquasec.com/misconfig/aws/lambda/avd-aws-0066/#Terraform
-# maybe consider fixing this in future
-AVD-AWS-0066
-AVD-AWS-0024
-AVD-AWS-0025

@@ -1,5 +1,5 @@
 # hadolint ignore=DL3006
-FROM aws-autorecycle-release-base
+FROM public.ecr.aws/lambda/python:3.11
 
 WORKDIR ${LAMBDA_TASK_ROOT}
 

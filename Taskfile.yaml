@@ -1,0 +1,96 @@
+version: "3"
+
+tasks:
+  lint:
+    desc: Linting checks
+    cmds:
+      - docker compose run --rm --entrypoint ruff python-tools check --fix src # python lint
+      - docker compose run --rm --entrypoint hadolint hadolint containers/release/Dockerfile containers/python-tools/Dockerfile # docker lint
+
+  test:
+    desc: Tests
+    cmds:
+      - docker compose build --no-cache python-tools
+      - docker compose run --rm --entrypoint mypy python-tools --install-types --non-interactive src # python type check
+      - docker compose up -d test  # make sure the lambda emulator is running
+      - docker compose run --rm -e AWS_DEFAULT_REGION=eu-west-2 --entrypoint pytest python-tools tests # python test
+      - docker compose down # cleanup
+      - docker compose run --rm terraform -chdir=terraform fmt -check -recursive . # terraform format check
+      - docker compose run --rm terraform -chdir=terraform init -backend=false # terraform init
+      - docker compose run --rm terraform -chdir=terraform validate # terraform validate
+
+  build:
+    desc: Builds the image
+    cmds:
+      - docker compose build # image build
+  
+  scan:
+    desc: Runs a trivy scan
+    cmds:
+      - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock public.ecr.aws/aquasecurity/trivy image ${IMAGE_URI} # trivy scan
+      
+  terraform-fmt-check:
+    desc: Check that all Terraform files are formatted correctly.
+    cmds:
+      - docker compose run --rm terraform -chdir=terraform fmt -check -recursive .
+
+  terraform-fmt:
+    desc: Format all Terraform files.
+    cmds:
+      - docker compose run --rm terraform -chdir=terraform fmt -recursive .
+
+  terraform-validate:
+    desc: Validate all Terraform files.
+    cmds:
+      - docker compose run --rm terraform -chdir=terraform init -backend=false
+      - docker compose run --rm terraform -chdir=terraform validate
+
+  terraform-security-check:
+    desc: Check Terraform files for security issues.
+    cmds:
+      - docker compose run --rm tfsec terraform
+
+  python-lint:
+    desc: Lint all Python files.
+    cmds:
+      - docker compose run --rm --entrypoint ruff python-tools check src
+
+  python-type-check:
+    desc: Type check all Python files.
+    cmds:
+      - docker compose run --rm --entrypoint mypy python-tools --install-types --non-interactive src
+
+  python-test:
+    desc: Run all Python tests.
+    cmds:
+      - docker compose run --rm -e AWS_DEFAULT_REGION=eu-west-2 --entrypoint pytest python-tools tests
+
+  python-security-check:
+    desc: Check Python files for security issues.
+    cmds:
+      - docker compose run --rm --entrypoint bandit python-tools -c pyproject.toml -r src
+
+  python-format:
+    desc: Format all Python files.
+    cmds:
+      - docker compose run --rm --entrypoint sh python-tools -c "isort src tests && black src tests"
+
+  docker-lint:
+    desc: Lint all Dockerfiles.
+    cmds:
+      - docker compose run --rm --entrypoint hadolint hadolint containers/lambda/Dockerfile containers/python-tools/Dockerfile
+
+  build-image:
+    desc: Build the Lambda image
+    cmds:
+      - docker compose build
+  
+  trivy-scan:
+    desc: Scan vulnerabilities with Trivy
+    cmds:
+      - docker run --rm -v /var/run/docker.sock:/var/run/docker.sock public.ecr.aws/aquasecurity/trivy image ${IMAGE_URI}
+
+  clean:
+    desc: Remove networks and any leftover containers
+    cmds:
+      - docker compose down

@@ -2,7 +2,7 @@ import json
 import os
 import unittest
 
-from mock import patch
+from unittest.mock import patch
 from src.autorecycle_invoke_stepfunctions.get_account_details import (
     AccountIdNotFound,
     ChannelNotFound,
