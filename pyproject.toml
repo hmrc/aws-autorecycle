@@ -37,10 +37,6 @@ dev = [
 ]
 test = [
   "pytest==8.3.3",
-  # Add pytest plugins here if you use them:
-  # "pytest-mock",
-  # "pytest-asyncio",
-  # "moto",
 ]
 
 [tool.black]
