@@ -14,7 +14,7 @@ def lambda_handler(lambda_event: Event, context: Any) -> Dict:
 
 
 def handle_event(lambda_event: Event) -> Event:
-    event = lambda_event
+    event = Event.model_validate(lambda_event)
     logger.debug("Initiating with the following event")
     logger.debug(event)
 
