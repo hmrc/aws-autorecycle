@@ -9,18 +9,18 @@ readme = "README.md"
 requires-python = ">=3.11"
 
 dependencies = [
-  "aws-lambda-powertools",      # your original dependency
-  "boto3==1.16.38",             # used by src/.../connectors/aws.py and others
-  "pymongo==4.6.3",             # used by mongo connector
-  "pymongo-auth-aws==1.1.0",    # for AWS IAM auth with Mongo
-  "aws-lambda-logging==0.1.1",  # used by monitor_autorecycle/main.py
-  "ansicolors==1.1.8",          # provides 'colors' module for colored output
-  "pytz==2023.3",               # used in tests/requirements.txt; keep aligned
-  "pydantic>=2.4.0,<3",         # you’re calling model_dump (Pydantic v2)
-  "urllib3>=1.25.4,<1.27",      # pinned per tests/requirements.txt
-  "tenacity==8.2.3",            # retry/backoff used across code
-  "rfc3339==6.2",               # date formatting utility (tests list it)
-  "hvac==0.11.2",               # HashiCorp Vault client (tests list it)
+  "aws-lambda-powertools",      
+  "boto3==1.16.38",             
+  "pymongo==4.6.3",             
+  "pymongo-auth-aws==1.1.0",    
+  "aws-lambda-logging==0.1.1",  
+  "ansicolors==1.1.8",          
+  "pytz==2023.3",               
+  "pydantic>=2.4.0,<3",         
+  "urllib3>=1.25.4,<1.27",      
+  "tenacity==8.2.3",            
+  "rfc3339==6.2",               
+  "hvac==0.11.2",              
   "urllib3>=1.25.4,<1.27",
   "freezegun==1.5.5",
   "moto==2.2.9",
