@@ -9,12 +9,13 @@ tasks:
 
   test:
     desc: Tests
+    defer:
+      - docker compose down
     cmds:
       - docker compose build --no-cache python-tools
       - docker compose run --rm --entrypoint mypy python-tools --install-types --non-interactive src # python type check
       - docker compose up -d test  # make sure the lambda emulator is running
       - docker compose run --rm -e AWS_DEFAULT_REGION=eu-west-2 --entrypoint pytest python-tools tests # python test
-      - docker compose down # cleanup
       - docker compose run --rm terraform -chdir=terraform fmt -check -recursive . # terraform format check
       - docker compose run --rm terraform -chdir=terraform init -backend=false # terraform init
       - docker compose run --rm terraform -chdir=terraform validate # terraform validate
