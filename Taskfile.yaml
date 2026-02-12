@@ -9,9 +9,8 @@ tasks:
 
   test:
     desc: Tests
-    defer:
-      - docker compose down
     cmds:
+      - defer: docker compose down 
       - docker compose build --no-cache python-tools
       - docker compose run --rm --entrypoint mypy python-tools --install-types --non-interactive src # python type check
       - docker compose up -d test  # make sure the lambda emulator is running
