@@ -1,0 +1,67 @@
+name: aws-autorecycle
+
+services:
+  test:
+    build:
+      context: .
+      dockerfile: containers/lambda-test/Dockerfile
+    volumes:
+      - ./src:/var/task
+      - ./site-packages:/opt/python 
+    command: monitor_autorecycle.main.lambda_handler
+    hostname: lambda
+    networks:
+      default:
+        aliases:
+          - lambda
+    ports:
+      - "8080:8080"
+
+  release:
+    build:
+      context: .
+      dockerfile: containers/release/Dockerfile
+    image: ${IMAGE_URI}
+
+  dev:
+    build:
+      context: .
+      dockerfile: containers/dev/Dockerfile
+    working_dir: /app
+    volumes:
+      - ./:/app
+
+  terraform:
+    image: hashicorp/terraform:1.10.3
+    working_dir: /work
+    user: root
+    environment:
+      SSH_AUTH_SOCK: /tmp/ssh-agent.sock
+      GIT_SSH_COMMAND: 'ssh -i /root/.ssh/ssh_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new'
+    volumes:
+      - ./:/work
+      - ${SSH_KEY_PATH}:/root/.ssh/ssh_key:ro
+      - ${SSH_AUTH_SOCK}:/tmp/ssh-agent.sock
+
+  python-tools:
+    build:
+      context: .
+      dockerfile: containers/python-tools/Dockerfile
+    volumes:
+      - ./:/work 
+    networks:
+          - default
+
+  tfsec:
+    image: aquasec/tfsec:latest
+    working_dir: /work
+    user: root
+    volumes:
+      - ./:/work
+
+  hadolint:
+    image: hadolint/hadolint:v2.14.0
+    working_dir: /work
+    user: "0"
+    volumes:
+      - ./:/work

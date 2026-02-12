@@ -2,7 +2,7 @@ import json
 import os
 import unittest
 
-from mock import patch
+from unittest.mock import patch
 from src.autorecycle_scale_asg import autoscaling
 from src.autorecycle_scale_asg.autoscaling import describe_asg, describe_scaling_activities
 
