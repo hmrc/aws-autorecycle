@@ -31,7 +31,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
             },
             "CheckClusterHealthInitial": {
               "Type": "Task",
-              "Comment": "Check that consul is healthy before we start. 1 leader and 2 followers totalling 3 members",
+              "Comment": "Check that consul is healthy before we start. 1 leader and 4 followers totalling 5 members",
               "Resource": "${local.check_cluster_health_lambda_arn}",
               "Parameters": {
                 "cluster.$": "$$.Execution.Input.cluster"

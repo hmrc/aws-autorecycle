@@ -24,7 +24,7 @@ class TestLambdaHandler(unittest.TestCase):
 
         mock_urlopen.side_effect = [mock_leader_response, mock_peers_response]
 
-        event = {"expectedPeers": 3}
+        event = {"expectedPeers": 5}
         response = lambda_handler(event, None)
 
         self.assertEqual(response["statusCode"], 200)
@@ -57,7 +57,7 @@ class TestLambdaHandler(unittest.TestCase):
         mock_urlopen.side_effect = [mock_leader_response, mock_peers_response]
 
         with self.assertRaises(Exception) as context:
-            lambda_handler({"expectedPeers": 3}, None)
+            lambda_handler({"expectedPeers": 5}, None)
 
         self.assertIn("1 peers found", str(context.exception))
 
