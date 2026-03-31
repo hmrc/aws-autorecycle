@@ -19,12 +19,12 @@ class TestLambdaHandler(unittest.TestCase):
 
         # Mock response for /v1/status/peers
         mock_peers_response = MagicMock()
-        mock_peers_response.read.return_value = json.dumps(["a", "b", "c"]).encode("utf-8")
+        mock_peers_response.read.return_value = json.dumps(["a", "b", "c", "a2", "b2"]).encode("utf-8")
         mock_peers_response.__enter__.return_value = mock_peers_response
 
         mock_urlopen.side_effect = [mock_leader_response, mock_peers_response]
 
-        event = {"expectedPeers": 3}
+        event = {"expectedPeers": 5}
         response = lambda_handler(event, None)
 
         self.assertEqual(response["statusCode"], 200)
@@ -57,7 +57,7 @@ class TestLambdaHandler(unittest.TestCase):
         mock_urlopen.side_effect = [mock_leader_response, mock_peers_response]
 
         with self.assertRaises(Exception) as context:
-            lambda_handler({"expectedPeers": 3}, None)
+            lambda_handler({"expectedPeers": 5}, None)
 
         self.assertIn("1 peers found", str(context.exception))
 

@@ -76,7 +76,7 @@ def get_ssl_context() -> ssl.SSLContext:
 def lambda_handler(event: Any, context: Any) -> Any:
     consul_host = get_consul_host(event)
 
-    expected_peers = event.get("expectedPeers", 3)  # Default to 3 if not provided
+    expected_peers = event.get("expectedPeers", 5)
 
     ssl_context = get_ssl_context()
 
