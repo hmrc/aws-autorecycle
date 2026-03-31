@@ -40,7 +40,7 @@ services:
       GIT_SSH_COMMAND: 'ssh -i /root/.ssh/ssh_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new'
     volumes:
       - ./:/work
-      - ${SSH_KEY_PATH}:/root/.ssh/ssh_key:ro
+      - ${SSH_KEY_PATH:-/dev/null}:/root/.ssh/ssh_key:ro
       - ${SSH_AUTH_SOCK}:/tmp/ssh-agent.sock
 
   python-tools:

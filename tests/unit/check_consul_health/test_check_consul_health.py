@@ -19,7 +19,7 @@ class TestLambdaHandler(unittest.TestCase):
 
         # Mock response for /v1/status/peers
         mock_peers_response = MagicMock()
-        mock_peers_response.read.return_value = json.dumps(["a", "b", "c"]).encode("utf-8")
+        mock_peers_response.read.return_value = json.dumps(["a", "b", "c", "a2", "b2"]).encode("utf-8")
         mock_peers_response.__enter__.return_value = mock_peers_response
 
         mock_urlopen.side_effect = [mock_leader_response, mock_peers_response]
