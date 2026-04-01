@@ -97,7 +97,7 @@ resource "aws_sfn_state_machine" "recycle_consul_agents" {
                     "ResultPath": "$.healthCheck",
                     "Parameters": {
                       "cluster.$": "$$.Execution.Input.cluster",
-                      "expectedPeers": 5
+                      "expectedPeers": 4
                     },
                     "Retry": [{
                       "ErrorEquals": ["States.ALL"],
