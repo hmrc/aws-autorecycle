@@ -1,67 +1,28 @@
 name: aws-autorecycle
 
 services:
-  test:
+  common:
     build:
-      context: .
-      dockerfile: containers/lambda-test/Dockerfile
-    volumes:
-      - ./src:/var/task
-      - ./site-packages:/opt/python 
+      context: git@github.com:hmrc/infrastructure-pipeline-lambda-build.git#taskfile:containers/lambda
+      additional_contexts:
+        lambda_package: .
+      args:
+        PYTHON_VERSION: 3.11
+      ssh: ["default"]
+
+  lambda:
+    extends:
+      service: common
+    build:
+      target: release
+      tags:
+        - ${IMAGE_URI}
     command: monitor_autorecycle.main.lambda_handler
-    hostname: lambda
-    networks:
-      default:
-        aliases:
-          - lambda
-    ports:
-      - "8080:8080"
 
-  release:
+  test:
+    extends:
+      service: common
     build:
-      context: .
-      dockerfile: containers/release/Dockerfile
-    image: ${IMAGE_URI}
-
-  dev:
-    build:
-      context: .
-      dockerfile: containers/dev/Dockerfile
-    working_dir: /app
-    volumes:
-      - ./:/app
-
-  terraform:
-    image: hashicorp/terraform:1.10.3
-    working_dir: /work
-    user: root
-    environment:
-      SSH_AUTH_SOCK: /tmp/ssh-agent.sock
-      GIT_SSH_COMMAND: 'ssh -i /root/.ssh/ssh_key -o IdentitiesOnly=yes -o StrictHostKeyChecking=accept-new'
-    volumes:
-      - ./:/work
-      - ${SSH_KEY_PATH:-/dev/null}:/root/.ssh/ssh_key:ro
-      - ${SSH_AUTH_SOCK}:/tmp/ssh-agent.sock
-
-  python-tools:
-    build:
-      context: .
-      dockerfile: containers/python-tools/Dockerfile
-    volumes:
-      - ./:/work 
-    networks:
-          - default
-
-  tfsec:
-    image: aquasec/tfsec:latest
-    working_dir: /work
-    user: root
-    volumes:
-      - ./:/work
-
-  hadolint:
-    image: hadolint/hadolint:v2.14.0
-    working_dir: /work
-    user: "0"
-    volumes:
-      - ./:/work
+      target: test
+    depends_on:
+      - lambda
