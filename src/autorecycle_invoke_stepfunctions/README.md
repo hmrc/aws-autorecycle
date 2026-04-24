@@ -32,12 +32,6 @@ You will need to authenticate with the management account to be able to pull the
 The Lambda can be built with `make build TAG=autorecycle-invoke-stepfunctions`.  
 This will build a Docker image which is tagged with `autorecycle-invoke-stepfunctions`.
 
-### Linting and Security Tests
-
-The linting and security tests are provided by the `aws-lambda-dev-base` image.
-
-They can be ran via Docker with `make test-lint`, which invokes the `make lint` command in `/devtools/Makefile`.
-
 ### Unit Tests
 
 Run the unit tests via your IDE or with Docker by `make test-unit`.
@@ -64,7 +58,7 @@ The Dockerfile contains both the `dev` (test) stage and a `release` stage.
 
 ### Stage: dev
 
-In the `dev` stage, it bases the image from `aws-lambda-dev-base` which contains linting and security tooling.
+In the `dev` stage, it bases the image from `public.ecr.aws/lambda/python:3.11` which contains linting and security tooling.
 
 It copies in the `pyproject.toml` which contains the Poetry dependencies and exports a `requirements.txt` which is used by the
 release stage to install locked production dependencies that the Lambda was tested with at the time.
