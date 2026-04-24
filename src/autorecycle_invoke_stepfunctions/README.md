@@ -67,7 +67,7 @@ Finally, the Python package `example` and the `tests` are copied in to the image
 
 ### Stage: release
 
-In the `release` stage, it bases the image from `aws-lambda-release-base` which contains a patched version of Python.
+In the `release` stage, it bases the image from `public.ecr.aws/lambda/python:3.11` which contains a patched version of Python.
 
 It installs the production dependencies via pip from the `requirements.txt` generated in the `dev` stage.
 
