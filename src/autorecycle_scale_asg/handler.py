@@ -103,9 +103,13 @@ def scale_asg(event: Event) -> Event:
                     fields=message_content_fields,
                     text="Auto-recycling has successfully initiated",
                 )
-                output.recycle_success = False
             else:
-                output.recycle_success = False
+                output.message_content = Event.MessageContent(
+                    color="good",
+                    fields=message_content_fields,
+                    text="Auto-recycling is already in progress",
+                )
+            output.recycle_success = False
             return output
 
         logger.info("Autorecycling has successfully completed")
