@@ -10,7 +10,7 @@ from src.autorecycle_scale_asg.logger import logger
 @logger.inject_lambda_context(log_event=True)
 def lambda_handler(lambda_event: Event, context: Any) -> Dict:
     result = handle_event(lambda_event)
-    return result.model_dump(exclude_unset=True)
+    return result.model_dump()
 
 
 def handle_event(lambda_event: Event) -> Event:
@@ -44,6 +44,23 @@ def handle_event(lambda_event: Event) -> Event:
 
 def scale_asg(event: Event) -> Event:
     output = autorecycle.create_output_params(event)
+
+    output.message_content = Event.MessageContent(
+        color="good",
+        fields=[
+            {
+                "title": "Component",
+                "value": event.component,
+                "short": True,
+            },
+            {
+                "title": "Environment",
+                "value": os.getenv("ENVIRONMENT"),
+                "short": True,
+            },
+        ],
+        text="Auto-recycling in progress",
+    )
 
     message_content_fields: List[Dict[str, Any]] = [
         {
