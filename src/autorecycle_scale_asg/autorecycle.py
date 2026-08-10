@@ -59,7 +59,7 @@ def get_next_asg_action(
     for asg in asgs:
         asg_name = asg["AutoScalingGroupName"]
         logger.info("Checking {} for instances to use out strategy".format(asg_name))
-        if len(asg["Instances"]) == 0:
+        if len(asg["Instances"]) == 0 or asg.get("DesiredCapacity", 0) == 0:
             logger.info("{} has no instances, setting scaling strategy to out".format(asg_name))
             return NextAsgAction(action="out", asg_name=asg_name)
 
