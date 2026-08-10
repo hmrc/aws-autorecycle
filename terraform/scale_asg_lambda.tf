@@ -1,5 +1,5 @@
 module "autorecycle_scale_asg_lambda" {
-  source = "git::ssh://git@github.com/hmrc/infrastructure-pipeline-lambda-build//terraform/modules/aws-lambda-container?depth=1"
+  source = "git@github.com:hmrc/terraform-aws-lambda-container.git?depth=1"
 
   account_engineering_boundary = var.account_engineering_boundary
   environment                  = var.environment
