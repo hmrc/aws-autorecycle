@@ -3,7 +3,7 @@ name: aws-autorecycle
 services:
   common:
     build:
-      context: git@github.com:hmrc/infrastructure-pipeline-lambda-build.git#taskfile:containers/lambda
+      context: git@github.com:hmrc/infrastructure-pipeline-lambda-build.git#main:containers/lambda
       additional_contexts:
         lambda_package: .
       args:
