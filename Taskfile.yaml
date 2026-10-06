@@ -8,5 +8,5 @@ env:
 
 includes:
   infrastructure-pipeline-lambda-build:
-    taskfile: git@github.com:hmrc/infrastructure-pipeline-lambda-build.git?ref=taskfile
+    taskfile: git@github.com:hmrc/infrastructure-pipeline-lambda-build.git?ref=main
     flatten: true
