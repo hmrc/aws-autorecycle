@@ -16,7 +16,6 @@ The structure of this project, along with steps to build the Lambda and run the 
 | tests/         | Integration and unit tests.                                                     |
 | Dockerfle      | The Docker commands required to build a test and release version of the Lambda. |
 | Makefile       | The commands required by the `buildLambda` function, plus others.               |
-| batect.yml     | The batect configuration for running the lambda and tests.                      |
 | pyproject.toml | The Python project configuration, including Poetry dependencies.                |
 
 
@@ -74,27 +73,6 @@ It installs the production dependencies via pip from the `requirements.txt` gene
 It then copies the Python package `example` and makes it executable.
 
 Finally, it tests whether it can import the `example` handler file and then sets the handler endpoint that Lambda will execute.
-
-## batect.yml
-
-The batect file contains three containers:
-
-| Name         | Description                                                                         |
-|--------------|-------------------------------------------------------------------------------------|
-| lambda       | The Lambda container using the `release` stage.                                     |
-| lambda-local | A copy of the `lambda` container with the port exposed for local integration tests. |
-| test         | The test container using the `dev` stage.                                           |
-| linter       | The test container using the `dev` stage with code directories mounted (r/w).       |
-
-And it contains the following tasks:
-
-| Name             | Description                                                                                                  |
-|------------------|--------------------------------------------------------------------------------------------------------------|
-| lambda-local     | Starts the `lambda-local` container for integration testing via your IDE.                                    |
-| test-integration | Starts the `lambda` container and then runs `poetry run tests/integration` in the `test` container.          |
-| test-unit        | Starts the `test` container and runs `poetry run tests/unit`.                                                |
-| test-lint        | Starts the `linter` container and runs `make lint` in the `/devtools` folder.                                |
-| fix-lint         | Starts the `linter` container and runs `make fix-lint` in the `/devtools` folder.                            |
 
 
 ## Other requirements
