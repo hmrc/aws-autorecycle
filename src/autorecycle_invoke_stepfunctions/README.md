@@ -15,7 +15,6 @@ The structure of this project, along with steps to build the Lambda and run the 
 | terraform/     | Terraform configuration that is deployed by `webops-terraform`.                 |
 | tests/         | Integration and unit tests.                                                     |
 | Dockerfle      | The Docker commands required to build a test and release version of the Lambda. |
-| Makefile       | The commands required by the `buildLambda` function, plus others.               |
 | pyproject.toml | The Python project configuration, including Poetry dependencies.                |
 
 
